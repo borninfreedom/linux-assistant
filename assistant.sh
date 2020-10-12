@@ -2,7 +2,7 @@
 
 
 SELECT=$(whiptail --title "Linux助手" --checklist \
-"选择要安装的软件或电脑配置（可多选，空格键选择，Tab键跳转)" 20 80 10 \
+"选择要安装的软件或电脑配置（可多选，空格键选择，Tab键跳转)" 20 80 13 \
 "1" "proxychains" OFF \
 "2" "VSCode" OFF \
 "3" "PyCharm Community" OFF \
