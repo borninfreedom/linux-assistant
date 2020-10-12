@@ -10,6 +10,8 @@ SELECT=$(whiptail --title "Linux助手" --checklist \
 "5" "WPS" OFF \
 "6" "Terminator (Ubuntu 16不建议装，代码配色有问题)" OFF \
 "7" "Qv2ray" OFF \
+"8" "TeamViewer" OFF \
+"9" "向日葵远控" OFF \
 "" "============================================" OFF \
 "50" "git clone 走socks5代理" OFF \
 "51" "git push记住用户名和密码（慎用）" OFF \
@@ -116,6 +118,27 @@ function vscode {
     &&  success
 }
 
+function teamviewer {
+    echo -e "${BYellow}将要安装TeamViewer${Color_Off}" && sleep 1s \
+	&& sudo apt install -y git \
+    && cd ~ \
+    && git clone https://gitlab.com/borninfreedom/teamviewer-package.git \
+    && cd teamviewer-package \
+    && sudo dpkg -i teamviewer.deb \
+    && sudo apt -f install \
+    &&  success
+}
+
+function xiangrikui {
+    echo -e "${BYellow}将要安装向日葵远控${Color_Off}" && sleep 1s \
+	&& sudo apt install -y git \
+    && cd ~ \
+    && git clone https://gitlab.com/borninfreedom/xiangrikui-package.git \
+    && cd xiangrikui-package \
+    && sudo dpkg -i xiangrikui.deb \
+    && sudo apt -f install \
+    &&  success
+}
 function pycharm-cmu {
     echo -e "${BYellow}将要安装PyCharm-Community${Color_Off}" && sleep 1s \
 	&& sudo apt install -y git \
@@ -141,6 +164,7 @@ function qv2ray {
     mv vcore ~/.config/qv2ray/
     success
 }
+
 
 function gitproxy {
 	read -p "请输入代理socks5代理端口，默认为1089，默认代理地址是127.0.0.1：" port
@@ -171,6 +195,8 @@ if [ $existstatus = 0 ]; then
    echo $SELECT | grep "5" && wps
    echo $SELECT | grep "6" && terminator
    echo $SELECT | grep "7" && qv2ray
+   echo $SELECT | grep "8" && teamviewer
+   echo $SELECT | grep "9" && xiangrikui
    echo $SELECT | grep "50" && gitproxy
    echo $SELECT | grep "51" && gitpush_store_passwd
    echo $SELECT | grep "52" && qv2ray
