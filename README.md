@@ -3,7 +3,7 @@ A software named linux-assistant that can direct install apps and config system.
 
 ![](https://github.com/borninfreedom/linux-assistant/blob/main/images/linux-assistant.png)
 ## 使用方法
-### 方法一：将脚本放在\usr\bin目录，可直接通过./assistant.sh运行
+### 方法一：将脚本放在/usr/bin目录，可直接通过./assistant.sh运行
 ```bash
 git clone https://github.com/borninfreedom/linux-assistant.git
 cd linux-assistant
