@@ -2,16 +2,16 @@
 
 resize -s 40 80
 SELECT=$(whiptail --title "Linux助手" --checklist \
-"选择要安装的软件或电脑配置（可多选，空格键选择，Tab键跳转)" 40 70 13 \
-"1" "proxychains" OFF \
-"2" "VSCode" OFF \
-"3" "PyCharm Community" OFF \
-"4" "RedShift-GTK" OFF \
-"5" "WPS" OFF \
-"6" "Terminator (Ubuntu 16不建议装，代码配色有问题)" OFF \
-"7" "Qv2ray" OFF \
-"8" "TeamViewer" OFF \
-"9" "向日葵远控" OFF \
+"选择要安装的软件或电脑配置（可多选，空格键选择，Tab键跳转)" 40 70 20 \
+"01" "proxychains" OFF \
+"02" "VSCode" OFF \
+"03" "PyCharm Community" OFF \
+"04" "RedShift-GTK" OFF \
+"05" "WPS" OFF \
+"06" "Terminator (Ubuntu 16不建议装，代码配色有问题)" OFF \
+"07" "Qv2ray" OFF \
+"08" "TeamViewer" OFF \
+"09" "向日葵远控" OFF \
 "10" "QQ" OFF \
 "" "============================================" OFF \
 "50" "git clone 走socks5代理" OFF \
@@ -201,15 +201,15 @@ function gitpush_store_passwd {
 existstatus=$?
 if [ $existstatus = 0 ]; then
    # echo $SELECT | grep "7" && echo "test success"
-   echo $SELECT | grep "1" && proxychains
-   echo $SELECT | grep "2" && vscode
-   echo $SELECT | grep "3" && pycharm-cmu
-   echo $SELECT | grep "4" && redshift
-   echo $SELECT | grep "5" && wps
-   echo $SELECT | grep "6" && terminator
-   echo $SELECT | grep "7" && qv2ray
-   echo $SELECT | grep "8" && teamviewer
-   echo $SELECT | grep "9" && xiangrikui
+   echo $SELECT | grep "01" && proxychains
+   echo $SELECT | grep "02" && vscode
+   echo $SELECT | grep "03" && pycharm-cmu
+   echo $SELECT | grep "04" && redshift
+   echo $SELECT | grep "05" && wps
+   echo $SELECT | grep "06" && terminator
+   echo $SELECT | grep "07" && qv2ray
+   echo $SELECT | grep "08" && teamviewer
+   echo $SELECT | grep "09" && xiangrikui
    echo $SELECT | grep "10" && qq
    echo $SELECT | grep "50" && gitproxy
    echo $SELECT | grep "51" && gitpush_store_passwd
