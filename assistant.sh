@@ -1,8 +1,8 @@
 #!/bin/bash
 
-
+resize -s 40 80
 SELECT=$(whiptail --title "Linux助手" --checklist \
-"选择要安装的软件或电脑配置（可多选，空格键选择，Tab键跳转)" 20 80 13 \
+"选择要安装的软件或电脑配置（可多选，空格键选择，Tab键跳转)" 40 70 13 \
 "1" "proxychains" OFF \
 "2" "VSCode" OFF \
 "3" "PyCharm Community" OFF \
@@ -12,6 +12,7 @@ SELECT=$(whiptail --title "Linux助手" --checklist \
 "7" "Qv2ray" OFF \
 "8" "TeamViewer" OFF \
 "9" "向日葵远控" OFF \
+"10" "QQ" OFF \
 "" "============================================" OFF \
 "50" "git clone 走socks5代理" OFF \
 "51" "git push记住用户名和密码（慎用）" OFF \
@@ -129,6 +130,18 @@ function teamviewer {
     &&  success
 }
 
+function qq {
+    echo -e "${BYellow}将要安装QQ${Color_Off}" && sleep 1s \
+	&& sudo apt install -y git \
+    && cd ~ \
+    && git clone https://gitlab.com/borninfreedom/qq-package.git \
+    && cd qq-package \
+    && sudo dpkg -i qq.deb \
+    && sudo apt -f install \
+    &&  success
+}
+
+
 function xiangrikui {
     echo -e "${BYellow}将要安装向日葵远控${Color_Off}" && sleep 1s \
 	&& sudo apt install -y git \
@@ -197,6 +210,7 @@ if [ $existstatus = 0 ]; then
    echo $SELECT | grep "7" && qv2ray
    echo $SELECT | grep "8" && teamviewer
    echo $SELECT | grep "9" && xiangrikui
+   echo $SELECT | grep "10" && qq
    echo $SELECT | grep "50" && gitproxy
    echo $SELECT | grep "51" && gitpush_store_passwd
    echo $SELECT | grep "52" && qv2ray
