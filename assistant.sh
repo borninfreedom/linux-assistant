@@ -184,10 +184,11 @@ function qv2ray {
     cd ~
     git clone https://gitlab.com/borninfreedom/qv2ray-packages.git ~/linux-assistant/qv2ray-packages
     cd ~/linux-assistant/qv2ray-packages
-    unzip vcore.zip
+    unzip vcore.zip -d vcore
     chmod a+x qv2ray.AppImage
     sudo ./qv2ray.AppImage
     mv vcore ~/.config/qv2ray/
+    cp qv2ray.AppImage ~/Desktop || cp qv2ray.AppImage ~/桌面
     success
 }
 
