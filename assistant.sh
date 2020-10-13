@@ -102,8 +102,8 @@ function wps {
 	echo -e "${BYellow}将要安装WPS${Color_Off}" && sleep 1s \
 	&& sudo apt install -y git \
     && cd ~ \
-    && git clone https://gitlab.com/borninfreedom/wps-packages.git \
-    && cd wps-packages \
+    && git clone https://gitlab.com/borninfreedom/wps-packages.git  ~/linux-assistant/wps-packages\
+    && cd ~/linux-assistant/wps-packages \
     && sudo dpkg -i wps.deb \
     && sudo apt -f install \
     &&  success
@@ -124,8 +124,8 @@ function mendeley {
     echo -e "${BGreen}将要安装mendeley文献管理软件${Color_Off}" && sleep 1s \
 	&& sudo apt install -y git \
     && cd ~ \
-    && git clone https://gitlab.com/borninfreedom/mendeley-package.git \
-    && cd mendeley-package \
+    && git clone https://gitlab.com/borninfreedom/mendeley-package.git ~/linux-assistant/mendeley-package\
+    && cd ~/linux-assistant/mendeley-package \
     && sudo dpkg -i mendeley.deb \
     && sudo apt -f install \
     &&  success
@@ -136,8 +136,8 @@ function teamviewer {
     echo -e "${BYellow}将要安装TeamViewer${Color_Off}" && sleep 1s \
 	&& sudo apt install -y git \
     && cd ~ \
-    && git clone https://gitlab.com/borninfreedom/teamviewer-package.git \
-    && cd teamviewer-package \
+    && git clone https://gitlab.com/borninfreedom/teamviewer-package.git ~/linux-assistant/teamviewer-package\
+    && cd ~/linux-assistant/teamviewer-package \
     && sudo dpkg -i teamviewer.deb \
     && sudo apt -f install \
     &&  success
@@ -147,8 +147,8 @@ function qq {
     echo -e "${BYellow}将要安装QQ${Color_Off}" && sleep 1s \
 	&& sudo apt install -y git \
     && cd ~ \
-    && git clone https://gitlab.com/borninfreedom/qq-package.git \
-    && cd qq-package \
+    && git clone https://gitlab.com/borninfreedom/qq-package.git ~/linux-assistant/qq-package\
+    && cd ~/linux-assistant/qq-package \
     && sudo dpkg -i qq.deb \
     && sudo apt -f install \
     &&  success
@@ -159,8 +159,8 @@ function xiangrikui {
     echo -e "${BYellow}将要安装向日葵远控${Color_Off}" && sleep 1s \
 	&& sudo apt install -y git \
     && cd ~ \
-    && git clone https://gitlab.com/borninfreedom/xiangrikui-package.git \
-    && cd xiangrikui-package \
+    && git clone https://gitlab.com/borninfreedom/xiangrikui-package.git ~/linux-assistant/xiangrikui-package\
+    && cd ~/linux-assistant/xiangrikui-package \
     && sudo dpkg -i xiangrikui.deb \
     && sudo apt -f install \
     &&  success
@@ -169,8 +169,8 @@ function pycharm-cmu {
     echo -e "${BYellow}将要安装PyCharm-Community${Color_Off}" && sleep 1s \
 	&& sudo apt install -y git \
     && cd ~ \
-    && git clone https://gitlab.com/borninfreedom/pycharm-cmu-packages.git \
-    && cd pycharm-cmu-packages \
+    && git clone https://gitlab.com/borninfreedom/pycharm-cmu-packages.git ~/linux-assistant/pycharm-cmu-packages\
+    && cd ~/linux-assistant/pycharm-cmu-packages \
     && tar -zxvf pycharm.tar.gz \
     && cd pycharm \
     && cd bin \
@@ -182,8 +182,8 @@ function qv2ray {
     echo -e "${BYellow}将要安装Qv2ray${Color_Off}" && sleep 1s
     sudo apt install -y git
     cd ~
-    git clone https://gitlab.com/borninfreedom/qv2ray-packages.git
-    cd qv2ray-packages
+    git clone https://gitlab.com/borninfreedom/qv2ray-packages.git ~/linux-assistant/qv2ray-packages
+    cd ~/linux-assistant/qv2ray-packages
     unzip vcore.zip
     chmod a+x qv2ray.AppImage
     sudo ./qv2ray.AppImage
