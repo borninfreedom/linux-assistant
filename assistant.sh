@@ -13,7 +13,8 @@ SELECT=$(whiptail --title "Linux助手" --checklist \
 "08" "TeamViewer" OFF \
 "09" "向日葵远控" OFF \
 "10" "QQ" OFF \
-"" "============================================" OFF \
+"11" "mendeley文献管理软件" OFF \
+"=" "============================================" OFF \
 "50" "git clone 走socks5代理" OFF \
 "51" "git push记住用户名和密码（慎用）" OFF \
 3>&1 1>&2 2>&3
@@ -119,6 +120,18 @@ function vscode {
     &&  success
 }
 
+function mendeley {
+    echo -e "${BGreen}将要安装mendeley文献管理软件${Color_Off}" && sleep 1s \
+	&& sudo apt install -y git \
+    && cd ~ \
+    && git clone https://gitlab.com/borninfreedom/mendeley-package.git \
+    && cd mendeley-package \
+    && sudo dpkg -i mendeley.deb \
+    && sudo apt -f install \
+    &&  success
+}
+
+
 function teamviewer {
     echo -e "${BYellow}将要安装TeamViewer${Color_Off}" && sleep 1s \
 	&& sudo apt install -y git \
@@ -211,6 +224,7 @@ if [ $existstatus = 0 ]; then
    echo $SELECT | grep "08" && teamviewer
    echo $SELECT | grep "09" && xiangrikui
    echo $SELECT | grep "10" && qq
+   echo $SELECT | grep "11" && mendeley
    echo $SELECT | grep "50" && gitproxy
    echo $SELECT | grep "51" && gitpush_store_passwd
    echo $SELECT | grep "52" && qv2ray
