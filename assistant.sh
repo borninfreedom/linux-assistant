@@ -1,7 +1,7 @@
 #!/bin/bash
 
 resize -s 40 80
-SELECT=$(whiptail --title "Linux助手" --checklist \
+SELECT=$(whiptail --title "Ubuntu助手" --checklist \
 "选择要安装的软件或电脑配置（可多选，空格键选择，Tab键跳转)" 40 70 20 \
 "01" "proxychains" OFF \
 "02" "VSCode" OFF \
@@ -14,7 +14,9 @@ SELECT=$(whiptail --title "Linux助手" --checklist \
 "09" "向日葵远控" OFF \
 "10" "QQ" OFF \
 "11" "mendeley文献管理软件" OFF \
-"=" "============================================" OFF \
+"12" "VirtualBox" OFF \
+"13" "Google Chrome" OFF \
+"==" "============================================" OFF \
 "50" "git clone 走socks5代理" OFF \
 "51" "git push记住用户名和密码（慎用）" OFF \
 3>&1 1>&2 2>&3
@@ -120,6 +122,19 @@ function vscode {
     &&  success
 }
 
+function chrome {
+    echo -e "${BYellow}将要安装Google Chrome${Color_Off}" && sleep 1s \
+	&& sudo apt install -y git \
+    && cd ~ \
+    && git clone https://gitlab.com/borninfreedom/chrome-package.git \
+    && cd chrome-package \
+    && sudo dpkg -i chrome.deb \
+    && sudo apt -f install \
+    &&  success
+    cd ..
+    rm -rf chrome-package
+}
+
 function mendeley {
     echo -e "${BGreen}将要安装mendeley文献管理软件${Color_Off}" && sleep 1s \
 	&& sudo apt install -y git \
@@ -185,13 +200,17 @@ function qv2ray {
     git clone https://gitlab.com/borninfreedom/qv2ray-packages.git ~/linux-assistant/qv2ray-packages
     cd ~/linux-assistant/qv2ray-packages
     unzip vcore.zip -d vcore
-    chmod a+x qv2ray.AppImage
-    sudo ./qv2ray.AppImage
+    mkdir -p ~/.config/qv2ray
     mv vcore ~/.config/qv2ray/
     cp qv2ray.AppImage ~/Desktop || cp qv2ray.AppImage ~/桌面
+    chmod a+x qv2ray.AppImage
+    sudo ./qv2ray.AppImage  
     success
 }
 
+function virtualbox {
+    sudo apt install -y virtualbox
+}
 
 function gitproxy {
 	read -p "请输入代理socks5代理端口，默认为1089，默认代理地址是127.0.0.1：" port
@@ -226,6 +245,8 @@ if [ $existstatus = 0 ]; then
    echo $SELECT | grep "09" && xiangrikui
    echo $SELECT | grep "10" && qq
    echo $SELECT | grep "11" && mendeley
+   echo $SELECT | grep "12" && virtualbox
+   echo $SELECT | grep "13" && chrome
    echo $SELECT | grep "50" && gitproxy
    echo $SELECT | grep "51" && gitpush_store_passwd
    echo $SELECT | grep "52" && qv2ray
