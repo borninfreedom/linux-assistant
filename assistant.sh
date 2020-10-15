@@ -144,6 +144,7 @@ function vscode {
     && sudo dpkg -i vscode.deb \
     && sudo apt -f install \
     &&  success \
+    && cd ~/linux-assistant \
     && rm -rf vscode-packages
 }
 
@@ -151,12 +152,12 @@ function chrome {
     echo -e "${BYellow}将要安装Google Chrome${Color_Off}" && sleep 1s \
 	&& sudo apt install -y git \
     && cd ~ \
-    && git clone https://gitlab.com/borninfreedom/chrome-package.git \
-    && cd chrome-package \
+    && git clone https://gitlab.com/borninfreedom/chrome-package.git ~/linux-assistant/chrome-package\
+    && cd ~/linux-assistant/chrome-package \
     && sudo dpkg -i chrome.deb \
     && sudo apt -f install \
     &&  success
-    cd ..
+    cd ~/linux-assistant
     rm -rf chrome-package
 }
 
