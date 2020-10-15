@@ -16,6 +16,7 @@ SELECT=$(whiptail --title "Ubuntu助手" --checklist \
 "11" "mendeley文献管理软件" OFF \
 "12" "VirtualBox" OFF \
 "13" "Google Chrome" OFF \
+"14" "Miniconda3" OFF \
 "==" "============================================" OFF \
 "50" "git clone 走socks5代理" OFF \
 "51" "git push记住用户名和密码（慎用）" OFF \
@@ -56,14 +57,13 @@ UCyan='\033[4;36m'        # Cyan
 UWhite='\033[4;37m'       # White
 
 
-
-function keep {
-	sleep 1s
-}
-
 function success {
 	# if you want to use colored font display, must add -e parameter.
 	echo -e "${BGreen}安装成功！"
+}
+
+function keep {
+	sleep 1s
 }
 
 function config_success {
@@ -71,16 +71,39 @@ function config_success {
 	echo -e "${BGreen}配置成功！"
 }
 
+through_git_deb() {
+    echo -e "${BGreen}将要安装$1 ${Color_Off}" && sleep 1s
+	sudo apt install -y git
+    git clone https://gitlab.com/borninfreedom/$1-package.git ~/linux-assistant/$1-package
+    cd ~/linux-assistant/$1-package
+    sudo dpkg -i $1.deb
+    sudo apt -f install
+    success
+    rm -rf ~/linux-assistant/$1-package
+}
+
+through_git_sh() {
+    echo -e "${BGreen}将要安装$1 ${Color_Off}" && sleep 1s
+	sudo apt install -y git
+    git clone https://gitlab.com/borninfreedom/$1-package.git ~/linux-assistant/$1-package
+    cd ~/linux-assistant/$1-package
+    chmod a+x $1.sh
+    ./$1.sh
+    rm -rf ~/linux-assistant/$1-package
+}
+
+
 function proxychains {
 	echo -e "${BYellow}将要安装proxychains。${Color_Off}" && sleep 1s 
 	cd ~ 
 	sudo apt install -y gcc git vim cmake
-	git clone https://github.com/rofl0r/proxychains-ng.git
-	cd ~/proxychains-ng
+	git clone https://github.com/rofl0r/proxychains-ng.git ~/linux-assistant/proxychains-ng
+	cd ~/linux-assistant/proxychains-ng
 	./configure
 	sudo make && sudo make install
 	sudo cp ./src/proxychains.conf /etc/proxychains.conf
 	echo -e "${BRed}请执行 sudo vi /etc/proxychains.conf ，将最后的 socks4 127.0.0.1 9095 改为 socks5 127.0.0.1 1089 ，其中 1089是qv2ray 6.0 版本 socks5 代理默认的开放端口，如果不确定自己的端口号，请查看后再输入。"
+    rm -rf proxychains-ng
 }
 
 function redshift {		# the former of { must have a space
@@ -108,7 +131,8 @@ function wps {
     && cd ~/linux-assistant/wps-packages \
     && sudo dpkg -i wps.deb \
     && sudo apt -f install \
-    &&  success
+    &&  success \
+    && rm -rf wps-packages
 }
 
 function vscode {
@@ -119,7 +143,8 @@ function vscode {
     && cd vscode-packages \
     && sudo dpkg -i vscode.deb \
     && sudo apt -f install \
-    &&  success
+    &&  success \
+    && rm -rf vscode-packages
 }
 
 function chrome {
@@ -143,7 +168,8 @@ function mendeley {
     && cd ~/linux-assistant/mendeley-package \
     && sudo dpkg -i mendeley.deb \
     && sudo apt -f install \
-    &&  success
+    &&  success \
+    && rm -rf mendeley-package
 }
 
 
@@ -155,7 +181,8 @@ function teamviewer {
     && cd ~/linux-assistant/teamviewer-package \
     && sudo dpkg -i teamviewer.deb \
     && sudo apt -f install \
-    &&  success
+    &&  success \
+    && rm -rf teamviewer-package
 }
 
 function qq {
@@ -166,7 +193,8 @@ function qq {
     && cd ~/linux-assistant/qq-package \
     && sudo dpkg -i qq.deb \
     && sudo apt -f install \
-    &&  success
+    &&  success \
+    && rm -rf qq-package
 }
 
 
@@ -178,7 +206,8 @@ function xiangrikui {
     && cd ~/linux-assistant/xiangrikui-package \
     && sudo dpkg -i xiangrikui.deb \
     && sudo apt -f install \
-    &&  success
+    &&  success \
+    && rm -rf xiangrikui-package
 }
 function pycharm-cmu {
     echo -e "${BYellow}将要安装PyCharm-Community${Color_Off}" && sleep 1s \
@@ -190,7 +219,8 @@ function pycharm-cmu {
     && cd pycharm \
     && cd bin \
     && ./pycharm.sh \
-    &&  success
+    &&  success \
+    && rm -rf pycharm-cmu-packages
 }
 
 function qv2ray {
@@ -203,6 +233,7 @@ function qv2ray {
     mkdir -p ~/.config/qv2ray
     mv vcore ~/.config/qv2ray/
     cp qv2ray.AppImage ~/Desktop || cp qv2ray.AppImage ~/桌面
+    cd ~/Desktop || cd ~/桌面
     chmod a+x qv2ray.AppImage
     sudo ./qv2ray.AppImage  
     success
@@ -230,7 +261,6 @@ function gitpush_store_passwd {
 }
 
 
-
 existstatus=$?
 if [ $existstatus = 0 ]; then
    # echo $SELECT | grep "7" && echo "test success"
@@ -247,6 +277,7 @@ if [ $existstatus = 0 ]; then
    echo $SELECT | grep "11" && mendeley
    echo $SELECT | grep "12" && virtualbox
    echo $SELECT | grep "13" && chrome
+   echo $SELECT | grep "14" && through_git_sh miniconda
    echo $SELECT | grep "50" && gitproxy
    echo $SELECT | grep "51" && gitpush_store_passwd
    echo $SELECT | grep "52" && qv2ray
