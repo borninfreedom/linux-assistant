@@ -195,6 +195,7 @@ function qq {
     && sudo dpkg -i qq.deb \
     && sudo apt -f install \
     &&  success \
+    && cd ~/linux-assistant \
     && rm -rf qq-package
 }
 
@@ -208,6 +209,7 @@ function xiangrikui {
     && sudo dpkg -i xiangrikui.deb \
     && sudo apt -f install \
     &&  success \
+    && cd ~/linux-assistant \
     && rm -rf xiangrikui-package
 }
 function pycharm-cmu {
