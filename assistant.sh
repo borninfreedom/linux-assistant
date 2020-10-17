@@ -291,7 +291,7 @@ if [ $existstatus = 0 ]; then
    echo $SELECT | grep "14" && through_git_sh miniconda
    echo $SELECT | grep "50" && gitproxy
    echo $SELECT | grep "51" && gitpush_store_passwd
-   echo $SELECT | grep "52" && qv2ray
+   echo $SELECT | grep "52" && conda_pip_sources
    echo $SELECT | grep "53" && qv2ray
    echo $SELECT | grep "54" && qv2ray
 else
