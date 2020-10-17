@@ -246,17 +246,33 @@ function xiangrikui {
     && rm -rf xiangrikui-package
 }
 function pycharm-cmu {
-    echo -e "${BYellow}将要安装PyCharm-Community${Color_Off}" && sleep 1s \
-	&& sudo apt install -y git \
-    && cd ~ \
-    && git clone https://gitlab.com/borninfreedom/pycharm-cmu-packages.git ~/linux-assistant/pycharm-cmu-packages\
-    && cd ~/linux-assistant/pycharm-cmu-packages \
-    && tar -zxvf pycharm.tar.gz \
-    && cd pycharm \
-    && cd bin \
-    && ./pycharm.sh \
-    &&  success \
-    && rm -rf pycharm-cmu-packages
+    echo -e "${BGreen}将要安装PyCharm-Community,这个软件安装时间很长，耐心等待！${Color_Off}" && sleep 1s
+	sudo apt install -y git
+    cd ~
+    ROOT_DIR="${HOME}/linux-assistant"
+    FILE_DIR="$ROOT_DIR/pycharm-cmu-packages"
+
+    if [ ! -d "$ROOT_DIR" ];then
+        mkdir -p $ROOT_DIR
+    else
+        if [ ! -d "$ROOT_DIR/pycharm-cmu-packages" ];then
+            git clone https://gitlab.com/borninfreedom/pycharm-cmu-packages.git ~/linux-assistant/pycharm-cmu-packages
+        fi
+    fi
+
+    cd $FILE_DIR
+    if [ ! -f "$1.deb" ];then
+        git clone https://gitlab.com/borninfreedom/pycharm-cmu-packages.git ~/linux-assistant/pycharm-cmu-packages
+    fi
+
+    
+    cd ~/linux-assistant/pycharm-cmu-packages
+    tar -zxvf pycharm.tar.gz
+    cd pycharm
+    cd bin
+    ./pycharm.sh
+    success
+    rm -rf pycharm-cmu-packages
 }
 
 function qv2ray {
