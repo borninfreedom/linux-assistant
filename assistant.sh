@@ -75,7 +75,23 @@ function config_success {
 through_git_deb() {
     echo -e "${BGreen}将要安装$1 ${Color_Off}" && sleep 1s
 	sudo apt install -y git
-    git clone https://gitlab.com/borninfreedom/$1-package.git ~/linux-assistant/$1-package
+
+    ROOT_DIR="${HOME}/linux-assistant"
+    FILE_DIR="$ROOT_DIR/$1-package"
+
+    if [ ! -d "$ROOT_DIR" ];then
+        mkdir -p $ROOT_DIR
+    else
+        if [ ! -d "$ROOT_DIR/$1-package" ];then
+            git clone https://gitlab.com/borninfreedom/$1-package.git ~/linux-assistant/$1-package
+        fi
+    fi
+
+    cd $FILE_DIR
+    if [ ! -f "$1.deb" ];then
+        git clone https://gitlab.com/borninfreedom/$1-package.git ~/linux-assistant/$1-package
+    fi
+
     cd ~/linux-assistant/$1-package
     sudo dpkg -i $1.deb
     sudo apt -f install
@@ -86,7 +102,23 @@ through_git_deb() {
 through_git_sh() {
     echo -e "${BGreen}将要安装$1 ${Color_Off}" && sleep 1s
 	sudo apt install -y git
-    git clone https://gitlab.com/borninfreedom/$1-package.git ~/linux-assistant/$1-package
+
+    ROOT_DIR="${HOME}/linux-assistant"
+    FILE_DIR="$ROOT_DIR/$1-package"
+
+    if [ ! -d "$ROOT_DIR" ];then
+        mkdir -p $ROOT_DIR
+    else
+        if [ ! -d "$ROOT_DIR/$1-package" ];then
+            git clone https://gitlab.com/borninfreedom/$1-package.git ~/linux-assistant/$1-package
+        fi
+    fi
+
+    cd $FILE_DIR
+    if [ ! -f "$1.sh" ];then
+        git clone https://gitlab.com/borninfreedom/$1-package.git ~/linux-assistant/$1-package
+    fi
+    
     cd ~/linux-assistant/$1-package
     chmod a+x $1.sh
     ./$1.sh
