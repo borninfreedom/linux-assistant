@@ -20,6 +20,7 @@ SELECT=$(whiptail --title "Ubuntu助手" --checklist \
 "==" "============================================" OFF \
 "50" "git clone 走socks5代理" OFF \
 "51" "git push记住用户名和密码（慎用）" OFF \
+"52" "conda,pip设置国内源" OFF \
 3>&1 1>&2 2>&3
 )
 
@@ -263,6 +264,13 @@ function gitpush_store_passwd {
 	git config --global credential.helper store && config_success
 }
 
+conda_pip_sources() {
+    conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+    conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
+    pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+    config_success
+    echo -e "${BGreen}配置成功，若要修改，执行vi ~/.condarc，vi ~/.config/pip/pip.config${Color_Off}" && sleep 1s
+}
 
 existstatus=$?
 if [ $existstatus = 0 ]; then
