@@ -18,9 +18,10 @@ SELECT=$(whiptail --title "Ubuntu助手" --checklist \
 "13" "Google Chrome" OFF \
 "14" "Miniconda3" OFF \
 "==" "============================================" OFF \
-"50" "git clone 走socks5代理" OFF \
-"51" "git push记住用户名和密码（慎用）" OFF \
-"52" "conda,pip设置国内源" OFF \
+"50" "git clone设置socks5代理" OFF \
+"51" "git clone取消代理" OFF \
+"52" "git push记住用户名和密码（慎用）" OFF \
+"53" "conda,pip设置国内源" OFF \
 3>&1 1>&2 2>&3
 )
 
@@ -320,6 +321,16 @@ conda_pip_sources() {
     echo -e "${BGreen}配置成功，若要修改，执行vi ~/.condarc，vi ~/.config/pip/pip.config${Color_Off}" && sleep 1s
 }
 
+gitproxy_cancel() {
+    git config --global --unset http.proxy
+    git config --global --unset https.proxy
+    config_success
+}
+
+selects() {
+    echo $SELECT | grep "$1" && "$2"
+}
+
 existstatus=$?
 if [ $existstatus = 0 ]; then
    # echo $SELECT | grep "7" && echo "test success"
@@ -338,10 +349,9 @@ if [ $existstatus = 0 ]; then
    echo $SELECT | grep "13" && chrome
    echo $SELECT | grep "14" && through_git_sh miniconda
    echo $SELECT | grep "50" && gitproxy
-   echo $SELECT | grep "51" && gitpush_store_passwd
-   echo $SELECT | grep "52" && conda_pip_sources
-   echo $SELECT | grep "53" && qv2ray
-   echo $SELECT | grep "54" && qv2ray
+   echo $SELECT | grep "52" && gitpush_store_passwd
+   echo $SELECT | grep "53" && conda_pip_sources
+    selects 51 gitproxy_cancel
 else
     echo "取消"
 fi
