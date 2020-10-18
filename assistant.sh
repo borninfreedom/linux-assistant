@@ -247,7 +247,7 @@ function xiangrikui {
     && rm -rf xiangrikui-package
 }
 function pycharm-cmu {
-    echo -e "${BGreen}将要安装PyCharm-Community,这个软件安装时间很长，耐心等待！${Color_Off}" && sleep 1s
+    echo -e "${BGreen}将要安装PyCharm-Community,git代理可能会影响下载！${Color_Off}" && sleep 1s
 	sudo apt install -y git
     cd ~
     ROOT_DIR="${HOME}/linux-assistant"
