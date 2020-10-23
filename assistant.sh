@@ -17,6 +17,7 @@ SELECT=$(whiptail --title "Ubuntu助手" --checklist \
 "12" "VirtualBox" OFF \
 "13" "Google Chrome" OFF \
 "14" "Miniconda3" OFF \
+"15" "CAJViewer" OFF \
 "==" "============================================" OFF \
 "50" "git clone设置socks5代理" OFF \
 "51" "git clone取消代理" OFF \
@@ -123,6 +124,34 @@ through_git_sh() {
     cd ~/linux-assistant/$1-package
     chmod a+x $1.sh
     ./$1.sh
+    rm -rf ~/linux-assistant/$1-package
+}
+
+through_git_appimage() {
+    echo -e "${BGreen}将要安装$1 ${Color_Off}" && sleep 1s
+	sudo apt install -y git
+
+    ROOT_DIR="${HOME}/linux-assistant"
+    FILE_DIR="$ROOT_DIR/$1-package"
+
+    if [ ! -d "$ROOT_DIR" ];then
+        mkdir -p $ROOT_DIR
+    else
+        if [ ! -d "$ROOT_DIR/$1-package" ];then
+            git clone https://gitee.com/borninfreedom/$1-package.git ~/linux-assistant/$1-package
+        fi
+    fi
+
+    cd $FILE_DIR
+    if [ ! -f "$1.sh" ];then
+        git clone https://gitee.com/borninfreedom/$1-package.git ~/linux-assistant/$1-package
+    fi
+    
+    cd ~/linux-assistant/$1-package
+    cp $1.AppImage ~/Desktop || cp $1.AppImage ~/桌面
+    cd ~/Desktop || cd ~/桌面
+    chmod a+x $1.AppImage
+    ./$1.AppImage
     rm -rf ~/linux-assistant/$1-package
 }
 
@@ -348,10 +377,12 @@ if [ $existstatus = 0 ]; then
    echo $SELECT | grep "12" && virtualbox
    echo $SELECT | grep "13" && chrome
    echo $SELECT | grep "14" && through_git_sh miniconda
+   echo $SELECT | grep "15" && through_git_appimage cajviewer
    echo $SELECT | grep "50" && gitproxy
    echo $SELECT | grep "52" && gitpush_store_passwd
    echo $SELECT | grep "53" && conda_pip_sources
     selects 51 gitproxy_cancel
+    
 else
     echo "取消"
 fi
