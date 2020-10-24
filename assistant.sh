@@ -21,6 +21,7 @@ SELECT=$(whiptail --title "Ubuntu助手" --checklist \
 "15" "CAJViewer" OFF \
 "16" "Gnome Tweak Tool" OFF \
 "17" "Sougou pinyin" OFF \
+"18" "HP Printer Driver" OFF \
 "==" "============================================" OFF \
 "50" "git clone设置socks5代理" OFF \
 "51" "git clone取消代理" OFF \
@@ -347,6 +348,25 @@ function virtualbox {
     sudo apt install -y virtualbox
 }
 
+hpdriver() {
+    echo -e "${BGreen} HP Printer Driver will be installed${Color_Off}"
+    sudo apt install -y git
+    cd ~
+    FOLDER="${HOME}/linux-assistant/hpdriver-package"
+    if [ ! -d "$FOLDER" ]; then
+        git clone https://gitee.com/borninfreedom/hpdriver-package.git ~/linux-assistant/hpdriver-package
+    else
+        [ ! -f "${FOLDER}/hpdriver.run" ] \
+        && rm -rf "${FOLDER}" \
+        && git clone https://gitee.com/borninfreedom/hpdriver-package.git ~/linux-assistant/hpdriver-package
+    fi
+
+    cd ~/linux-assistant/hpdriver-package
+    chmod a+x hpdriver.run
+    sudo ./hpdriver.run
+    rm -rf ~/linux-assistant/hpdriver-package
+}
+
 function gitproxy {
 	read -p "请输入代理socks5代理端口，默认为1089，默认代理地址是127.0.0.1：" port
     port=${port:1089}
@@ -406,6 +426,7 @@ if [ $existstatus = 0 ]; then
     echo $SELECT | grep "52" && gitpush_store_passwd
     echo $SELECT | grep "53" && conda_pip_sources
     selects 51 gitproxy_cancel
+    selects 18 hpdriver
     
 else
     echo "取消"
