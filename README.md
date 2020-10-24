@@ -3,11 +3,15 @@ A software named linux-assistant that can direct install apps and config system.
 
 ![](https://github.com/borninfreedom/linux-assistant/blob/main/images/linux-assistant.png)
 ## 使用方法
-### 方法一：将脚本放在```/usr/bin```目录，可直接通过```./assistant.sh```运行
+### Method 1
+* run
 ```bash
-git clone https://github.com/borninfreedom/linux-assistant.git
-cd linux-assistant
-sudo cp assistant.sh /usr/bin
+cd ~/linux-assistant
+chmod a+x assistant.sh  # only need to execute once
+./assistant.sh
 ```
-### 方法二：将脚本放在普通文件夹中，比如就是直接clone下来的linux-assistant中，每次通过cp到目录来执行脚本。
+
+### Method 2
+* Move the 'assistant.sh' to the HOME folder, the command is ```mv ~/linux-assistant/assistant.sh ~```,then can run the script directly open the terminal and run ```./assistant.sh```
+
 
