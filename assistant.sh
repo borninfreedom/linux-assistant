@@ -1,8 +1,9 @@
 #!/bin/bash
-
-
+sudo apt install -y xterm
+resize -s 40 80
+#terminator --geometry=485x299 -b
 SELECT=$(whiptail --title "Ubuntu助手" --checklist \
-"选择要安装的软件或电脑配置（可多选，空格键选择，Tab键跳转)" 40 70 20 \
+"选择要安装的软件或电脑配置（可多选，空格键选择，Tab键跳转)" 40 70 26 \
 "01" "proxychains" OFF \
 "02" "VSCode" OFF \
 "03" "PyCharm Community" OFF \
@@ -384,26 +385,26 @@ selects() {
 existstatus=$?
 if [ $existstatus = 0 ]; then
    # echo $SELECT | grep "7" && echo "test success"
-   echo $SELECT | grep "01" && proxychains
-   echo $SELECT | grep "02" && vscode
-   echo $SELECT | grep "03" && pycharm-cmu
-   echo $SELECT | grep "04" && redshift
-   echo $SELECT | grep "05" && wps
-   echo $SELECT | grep "06" && terminator
-   echo $SELECT | grep "07" && qv2ray
-   echo $SELECT | grep "08" && teamviewer
-   echo $SELECT | grep "09" && xiangrikui
-   echo $SELECT | grep "10" && qq
-   echo $SELECT | grep "11" && mendeley
-   echo $SELECT | grep "12" && virtualbox
-   echo $SELECT | grep "13" && chrome
-   echo $SELECT | grep "14" && through_git_sh miniconda
-   echo $SELECT | grep "15" && through_git_appimage cajviewer
-   echo $SELECT | grep "16" && sudo apt install gnome-tweak-tool
-   echo $SELECT | grep "17" && through_git_deb sogou && echo -e "${BGreen}please restart to make sogou available.${Color_Off}"
-   echo $SELECT | grep "50" && gitproxy
-   echo $SELECT | grep "52" && gitpush_store_passwd
-   echo $SELECT | grep "53" && conda_pip_sources
+    echo $SELECT | grep "01" && proxychains
+    echo $SELECT | grep "02" && vscode
+    echo $SELECT | grep "03" && pycharm-cmu
+    echo $SELECT | grep "04" && redshift
+    echo $SELECT | grep "05" && wps
+    echo $SELECT | grep "06" && terminator
+    echo $SELECT | grep "07" && qv2ray
+    echo $SELECT | grep "08" && teamviewer
+    echo $SELECT | grep "09" && xiangrikui
+    echo $SELECT | grep "10" && qq
+    echo $SELECT | grep "11" && mendeley
+    echo $SELECT | grep "12" && virtualbox
+    echo $SELECT | grep "13" && chrome
+    echo $SELECT | grep "14" && through_git_sh miniconda
+    echo $SELECT | grep "15" && through_git_appimage cajviewer
+    echo $SELECT | grep "16" && sudo apt install gnome-tweak-tool
+    echo $SELECT | grep "17" && through_git_deb sogou && echo -e "${BGreen}please restart to make sogou available.${Color_Off}"
+    echo $SELECT | grep "50" && gitproxy
+    echo $SELECT | grep "52" && gitpush_store_passwd
+    echo $SELECT | grep "53" && conda_pip_sources
     selects 51 gitproxy_cancel
     
 else

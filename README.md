@@ -2,6 +2,9 @@
 A software named linux-assistant that can direct install apps and config system.
 
 ![](https://github.com/borninfreedom/linux-assistant/blob/main/images/linux-assistant.png)
+
+* NOTE: The APP is not compatible with terminator. It's normal on gnome-terminal, but not on terminator.
+
 ## 使用方法
 ### Method 1
 * run
