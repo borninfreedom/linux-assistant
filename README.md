@@ -1,5 +1,9 @@
 # linux-assistant
 A software named linux-assistant that can direct install apps and config system.
+There is an clone version of this repos in Gitee, you can just run 
+```bash
+git clone https://gitee.com/borninfreedom/linux-assistant.git
+```
 
 ![](https://github.com/borninfreedom/linux-assistant/blob/main/images/linux-assistant.png)
 
