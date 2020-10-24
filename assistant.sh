@@ -1,6 +1,6 @@
 #!/bin/bash
 
-resize -s 40 80
+
 SELECT=$(whiptail --title "Ubuntu助手" --checklist \
 "选择要安装的软件或电脑配置（可多选，空格键选择，Tab键跳转)" 40 70 20 \
 "01" "proxychains" OFF \
@@ -18,6 +18,8 @@ SELECT=$(whiptail --title "Ubuntu助手" --checklist \
 "13" "Google Chrome" OFF \
 "14" "Miniconda3" OFF \
 "15" "CAJViewer" OFF \
+"16" "Gnome Tweak Tool" OFF \
+"17" "Sougou pinyin" OFF \
 "==" "============================================" OFF \
 "50" "git clone设置socks5代理" OFF \
 "51" "git clone取消代理" OFF \
@@ -85,13 +87,13 @@ through_git_deb() {
         mkdir -p $ROOT_DIR
     else
         if [ ! -d "$ROOT_DIR/$1-package" ];then
-            git clone https://gitlab.com/borninfreedom/$1-package.git ~/linux-assistant/$1-package
+            git clone https://gitee.com/borninfreedom/$1-package.git ~/linux-assistant/$1-package
         fi
     fi
 
     cd $FILE_DIR
     if [ ! -f "$1.deb" ];then
-        git clone https://gitlab.com/borninfreedom/$1-package.git ~/linux-assistant/$1-package
+        git clone https://gitee.com/borninfreedom/$1-package.git ~/linux-assistant/$1-package
     fi
 
     cd ~/linux-assistant/$1-package
@@ -151,7 +153,7 @@ through_git_appimage() {
     cp $1.AppImage ~/Desktop || cp $1.AppImage ~/桌面
     cd ~/Desktop || cd ~/桌面
     chmod a+x $1.AppImage
-    ./$1.AppImage
+    echo -e "${BGreen}Please double click the $1.AppImage to launch it on the Desktop.${Color_Off}"
     rm -rf ~/linux-assistant/$1-package
 }
 
@@ -172,7 +174,7 @@ function proxychains {
 function redshift {		# the former of { must have a space
 	echo "Install redshift" && sleep 1s \
 	# -y parameter indicates that you auto select yes.
-	sudo apt install -y redshift-gtk && echo "${BYellow}安装成功"
+	sudo apt install -y redshift-gtk && echo "${BYellow}安装成功${Color_Off}"
 	# when you exec a command, shell will return a flag that indicates whether exec successfully. if success ,return 0, otherwise 1 default. you can use 
 	# $? to extract the flag. 
 	# the role of && is  if $?==0, then exec next cmd.
@@ -180,17 +182,17 @@ function redshift {		# the former of { must have a space
 }
 
 function terminator {
-	echo -e "${BYellow}将要安装terminator${Color_Off}" \
+	echo -e "${BGreen}将要安装terminator${Color_Off}" \
 	&& sleep 1s \
 	&& sudo apt install -y terminator \
-	&& echo -e "${BYellow}安装成功"
+	&& echo -e "${BGreen}安装成功"
 }
 
 function wps {
 	echo -e "${BYellow}将要安装WPS${Color_Off}" && sleep 1s \
 	&& sudo apt install -y git \
     && cd ~ \
-    && git clone https://gitlab.com/borninfreedom/wps-packages.git  ~/linux-assistant/wps-packages\
+    && git clone https://gitee.com/borninfreedom/wps-packages.git  ~/linux-assistant/wps-packages\
     && cd ~/linux-assistant/wps-packages \
     && sudo dpkg -i wps.deb \
     && sudo apt -f install \
@@ -199,41 +201,41 @@ function wps {
 }
 
 function vscode {
-    echo -e "${BYellow}将要安装VSCode${Color_Off}" && sleep 1s \
-	&& sudo apt install -y git \
-    && cd ~ \
-    && git clone https://gitlab.com/borninfreedom/vscode-packages.git \
-    && cd vscode-packages \
-    && sudo dpkg -i vscode.deb \
-    && sudo apt -f install \
-    &&  success \
-    && cd ~/linux-assistant \
-    && rm -rf vscode-packages
+    echo -e "${BGreen}将要安装VSCode${Color_Off}" && sleep 1s 
+	sudo apt install -y git 
+    cd ~ 
+    git clone https://gitee.com/borninfreedom/vscode-packages.git 
+    cd vscode-packages 
+    sudo dpkg -i vscode.deb 
+    sudo apt -f install 
+    success 
+    cd ~/linux-assistant 
+    rm -rf vscode-packages
 }
 
 function chrome {
-    echo -e "${BYellow}将要安装Google Chrome${Color_Off}" && sleep 1s \
-	&& sudo apt install -y git \
-    && cd ~ \
-    && git clone https://gitlab.com/borninfreedom/chrome-package.git ~/linux-assistant/chrome-package\
-    && cd ~/linux-assistant/chrome-package \
-    && sudo dpkg -i chrome.deb \
-    && sudo apt -f install \
-    &&  success
+    echo -e "${BYellow}将要安装Google Chrome${Color_Off}" && sleep 1s 
+	sudo apt install -y git 
+    cd ~ 
+    git clone https://gitee.com/borninfreedom/chrome-package.git ~/linux-assistant/chrome-package
+    cd ~/linux-assistant/chrome-package 
+    sudo dpkg -i chrome.deb 
+    sudo apt -f install 
+    success
     cd ~/linux-assistant
     rm -rf chrome-package
 }
 
 function mendeley {
-    echo -e "${BGreen}将要安装mendeley文献管理软件${Color_Off}" && sleep 1s \
-	&& sudo apt install -y git \
-    && cd ~ \
-    && git clone https://gitlab.com/borninfreedom/mendeley-package.git ~/linux-assistant/mendeley-package\
-    && cd ~/linux-assistant/mendeley-package \
-    && sudo dpkg -i mendeley.deb \
-    && sudo apt -f install \
-    &&  success \
-    && rm -rf mendeley-package
+    echo -e "${BGreen}将要安装mendeley文献管理软件${Color_Off}" && sleep 1s 
+	sudo apt install -y git 
+    cd ~ 
+    git clone https://gitee.com/borninfreedom/mendeley-package.git ~/linux-assistant/mendeley-package
+    cd ~/linux-assistant/mendeley-package 
+    sudo dpkg -i mendeley.deb 
+    sudo apt -f install 
+    success
+    rm -rf ~/linux-assistant/mendeley-package
 }
 
 
@@ -241,7 +243,7 @@ function teamviewer {
     echo -e "${BYellow}将要安装TeamViewer${Color_Off}" && sleep 1s \
 	&& sudo apt install -y git \
     && cd ~ \
-    && git clone https://gitlab.com/borninfreedom/teamviewer-package.git ~/linux-assistant/teamviewer-package\
+    && git clone https://gitee.com/borninfreedom/teamviewer-package.git ~/linux-assistant/teamviewer-package\
     && cd ~/linux-assistant/teamviewer-package \
     && sudo dpkg -i teamviewer.deb \
     && sudo apt -f install \
@@ -250,16 +252,26 @@ function teamviewer {
 }
 
 function qq {
-    echo -e "${BYellow}将要安装QQ${Color_Off}" && sleep 1s \
-	&& sudo apt install -y git \
-    && cd ~ \
-    && git clone https://gitlab.com/borninfreedom/qq-package.git ~/linux-assistant/qq-package\
-    && cd ~/linux-assistant/qq-package \
-    && sudo dpkg -i qq.deb \
-    && sudo apt -f install \
-    &&  success \
-    && cd ~/linux-assistant \
-    && rm -rf qq-package
+    echo -e "${BGreen}将要安装QQ${Color_Off}" && sleep 1s 
+	sudo apt install -y git 
+    cd ~ 
+
+    FOLDER="${HOME}/linux-assistant/qq-package"
+    if [ ! -d "$FOLDER" ]; then
+         git clone https://gitee.com/borninfreedom/qq-package.git ~/linux-assistant/qq-package
+    else
+        [ ! -f "${FOLDER}/qq.deb" ] \
+        && rm -rf "${FOLDER}" \
+        &&  git clone https://gitlab.com/borninfreedom/qq-package.git ~/linux-assistant/qq-package
+    fi
+
+    #git clone https://gitlab.com/borninfreedom/qq-package.git ~/linux-assistant/qq-package
+    cd ~/linux-assistant/qq-package 
+    sudo dpkg -i qq.deb 
+    sudo apt -f install 
+    success 
+    cd ~/linux-assistant 
+    rm -rf qq-package
 }
 
 
@@ -267,7 +279,7 @@ function xiangrikui {
     echo -e "${BYellow}将要安装向日葵远控${Color_Off}" && sleep 1s \
 	&& sudo apt install -y git \
     && cd ~ \
-    && git clone https://gitlab.com/borninfreedom/xiangrikui-package.git ~/linux-assistant/xiangrikui-package\
+    && git clone https://gitee.com/borninfreedom/xiangrikui-package.git ~/linux-assistant/xiangrikui-package\
     && cd ~/linux-assistant/xiangrikui-package \
     && sudo dpkg -i xiangrikui.deb \
     && sudo apt -f install \
@@ -309,16 +321,25 @@ function qv2ray {
     echo -e "${BYellow}将要安装Qv2ray${Color_Off}" && sleep 1s
     sudo apt install -y git
     cd ~
-    git clone https://gitlab.com/borninfreedom/qv2ray-packages.git ~/linux-assistant/qv2ray-packages
+
+    FOLDER="${HOME}/linux-assistant/qv2ray-packages"
+    if [ ! -d "$FOLDER" ]; then
+        git clone https://gitlab.com/borninfreedom/qv2ray-packages.git ~/linux-assistant/qv2ray-packages
+    else
+        [ ! -f "${FOLDER}/qv2ray.AppImage" ] \
+        && rm -rf "${FOLDER}" \
+        && git clone https://gitlab.com/borninfreedom/qv2ray-packages.git ~/linux-assistant/qv2ray-packages
+    fi
+
+
     cd ~/linux-assistant/qv2ray-packages
     unzip vcore.zip -d vcore
-    mkdir -p ~/.config/qv2ray
-    mv vcore ~/.config/qv2ray/
-    cp qv2ray.AppImage ~/Desktop || cp qv2ray.AppImage ~/桌面
+    cp qv2ray.AppImage ~/  || cp qv2ray.AppImage ~/桌面
     cd ~/Desktop || cd ~/桌面
     chmod a+x qv2ray.AppImage
-    sudo ./qv2ray.AppImage  
-    success
+    sudo ./qv2ray.AppImage
+    echo -e "${BRed}NOTE:please close the Qv2ray window and run the command 'mv ~/qv2ray-packages/vcore ~/.config/qv2ray',and then relaunch the qv2ray.AppImage.${Color_Off}"
+    mv ~/linux-assistant/qv2ray-packages ~/qv2ray-packages
 }
 
 function virtualbox {
@@ -378,6 +399,8 @@ if [ $existstatus = 0 ]; then
    echo $SELECT | grep "13" && chrome
    echo $SELECT | grep "14" && through_git_sh miniconda
    echo $SELECT | grep "15" && through_git_appimage cajviewer
+   echo $SELECT | grep "16" && sudo apt install gnome-tweak-tool
+   echo $SELECT | grep "17" && through_git_deb sogou && echo -e "${BGreen}please restart to make sogou available.${Color_Off}"
    echo $SELECT | grep "50" && gitproxy
    echo $SELECT | grep "52" && gitpush_store_passwd
    echo $SELECT | grep "53" && conda_pip_sources
