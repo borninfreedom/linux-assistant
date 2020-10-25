@@ -22,6 +22,7 @@ SELECT=$(whiptail --title "Ubuntu助手" --checklist \
 "16" "Gnome Tweak Tool" OFF \
 "17" "Sougou pinyin" OFF \
 "18" "HP Printer Driver" OFF \
+"19" "VMWare Workstation Pro 16" OFF \
 "==" "============================================" OFF \
 "==" "============================================" OFF \
 "50" "git clone设置socks5代理" OFF \
@@ -413,6 +414,25 @@ selects() {
     echo $SELECT | grep "$1" && "$2"
 }
 
+vmware() {
+    echo -e "${BGreen}将要安装VMWare Workstation Pro 16, 安装包较大，请耐心等待。${Color_Off}" && sleep 1s
+    sudo apt install -y git
+    cd ~
+    FOLDER="${HOME}/linux-assistant/vmware-package"
+    if [ ! -d "$FOLDER" ]; then
+        git clone https://gitlab.com/borninfreedom/vmware-package.git ~/linux-assistant/vmware-package
+    else
+        [ ! -f "${FOLDER}/vmware.bundle" ] \
+        && rm -rf "${FOLDER}" \
+        && git clone https://gitlab.com/borninfreedom/vmware-package.git ~/linux-assistant/vmware-package
+    fi
+
+    cd ~/linux-assistant/vmware-package
+    chmod a+x vmware.bundle
+    sudo ./vmware.bundle
+    rm -rf ~/linux-assistant/vmware-package
+}
+
 existstatus=$?
 if [ $existstatus = 0 ]; then
    # echo $SELECT | grep "7" && echo "test success"
@@ -432,7 +452,10 @@ if [ $existstatus = 0 ]; then
     echo $SELECT | grep "14" && through_git_sh miniconda
     echo $SELECT | grep "15" && through_git_appimage cajviewer
     echo $SELECT | grep "16" && sudo apt install gnome-tweak-tool
-    
+
+    selects 18 hpdriver
+    selects 19 vmware
+
     echo $SELECT | grep "50" && gitproxy
     echo $SELECT | grep "52" && gitpush_store_passwd
     echo $SELECT | grep "53" && conda_pip_sources
@@ -441,9 +464,7 @@ if [ $existstatus = 0 ]; then
 
 
     selects 51 gitproxy_cancel
-    selects 18 hpdriver
-
-
+    
     echo $SELECT | grep "01" && proxychains
     echo $SELECT | grep "17" && through_git_deb sogou && echo -e "${BGreen}please restart to make sogou available.${Color_Off}"
     echo $SELECT | grep "07" && qv2ray
