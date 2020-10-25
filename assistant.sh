@@ -431,6 +431,11 @@ vmware() {
     chmod a+x vmware.bundle
     sudo ./vmware.bundle
     rm -rf ~/linux-assistant/vmware-package
+    echo -e "${BGreen}注册码:${Color_Off}"
+    echo "1.  ZF3R0-FHED2-M80TY-8QYGC-NPKYF"
+    echo "2.  YF390-0HF8P-M81RQ-2DXQE-M2UT6"
+    echo "3.  ZF71R-DMX85-08DQY-8YMNC-PPHV8"
+
 }
 
 existstatus=$?
@@ -454,7 +459,7 @@ if [ $existstatus = 0 ]; then
     echo $SELECT | grep "16" && sudo apt install gnome-tweak-tool
 
     selects 18 hpdriver
-    selects 19 vmware
+    
 
     echo $SELECT | grep "50" && gitproxy
     echo $SELECT | grep "52" && gitpush_store_passwd
@@ -466,6 +471,7 @@ if [ $existstatus = 0 ]; then
     selects 51 gitproxy_cancel
     
     echo $SELECT | grep "01" && proxychains
+    selects 19 vmware
     echo $SELECT | grep "17" && through_git_deb sogou && echo -e "${BGreen}please restart to make sogou available.${Color_Off}"
     echo $SELECT | grep "07" && qv2ray
     
