@@ -453,6 +453,9 @@ cuda() {
     wget http://developer.download.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.243_418.87.00_linux.run
     sudo sh cuda_10.1.243_418.87.00_linux.run
     success
+    echo "export PATH=$PATH:/usr/local/cuda-10.1/" >> ~/.bashrc
+    echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-10.1/lib64" >> ~/.bashrc
+    source ~/.bashrc
     rm -rf ~/cuda_10.1.243_418.87.00_linux.run
 
     echo -e "${BGreen}将要安装cudnn7.6.5，安装包较大，请耐心等待。${Color_Off}"
@@ -531,9 +534,9 @@ if [ $existstatus = 0 ]; then
 
     # it's the notes for some software below
     echo $SELECT | grep "19" && echo -e "${BGreen}VMWare注册码：${Color_Off}"
-    echo "1.  ZF3R0-FHED2-M80TY-8QYGC-NPKYF"
-    echo "2.  YF390-0HF8P-M81RQ-2DXQE-M2UT6"
-    echo "3.  ZF71R-DMX85-08DQY-8YMNC-PPHV8"
+    echo $SELECT | grep "19" && echo "1.  ZF3R0-FHED2-M80TY-8QYGC-NPKYF"
+    echo $SELECT | grep "19" && echo "2.  YF390-0HF8P-M81RQ-2DXQE-M2UT6"
+    echo $SELECT | grep "19" && echo "3.  ZF71R-DMX85-08DQY-8YMNC-PPHV8"
 
     echo ""
     echo $SELECT | grep "17" && echo -e "${BGreen}请打开地区和语言设置->管理已安装语言->系统输入法框架，更改为fcitx，然后重启。重启后在输入法中添加搜狗，具体操作请参考：https://blog.csdn.net/lupengCSDN/article/details/80279177。只参考系统设置部分就可以，安装部分已经完成。"
