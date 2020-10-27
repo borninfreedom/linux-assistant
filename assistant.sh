@@ -21,8 +21,8 @@ SELECT=$(whiptail --title "Ubuntu助手" --checklist \
 "15" "CAJViewer" OFF \
 "16" "Gnome Tweak Tool" OFF \
 "17" "Sougou pinyin" OFF \
-"18" "HP Printer Driver" OFF \
 "19" "VMWare Workstation Pro 16" OFF \
+"20" "CUDA 10.1, cudnn 7.6.5, (only Ubuntu 18)" OFF \
 "==" "============================================" OFF \
 "==" "============================================" OFF \
 "50" "git clone设置socks5代理" OFF \
@@ -304,13 +304,13 @@ function pycharm-cmu {
         mkdir -p $ROOT_DIR
     else
         if [ ! -d "$ROOT_DIR/pycharm-cmu-packages" ];then
-            git clone https://gitlab.com/borninfreedom/pycharm-cmu-packages.git ~/linux-assistant/pycharm-cmu-packages
+            git clone https://gitee.com/borninfreedom/pycharm-cmu-packages.git ~/linux-assistant/pycharm-cmu-packages
         fi
     fi
 
     cd $FILE_DIR
     if [ ! -f "$1.deb" ];then
-        git clone https://gitlab.com/borninfreedom/pycharm-cmu-packages.git ~/linux-assistant/pycharm-cmu-packages
+        git clone https://gitee.com/borninfreedom/pycharm-cmu-packages.git ~/linux-assistant/pycharm-cmu-packages
     fi
 
     
@@ -393,7 +393,16 @@ function gitproxy {
 }
 
 function gitpush_store_passwd {
-	git config --global credential.helper store && config_success
+    echo -e "${BRed}如果您的Gitee、GitHub、Gitlab不是同用户名、同密码，使用这项会造成上传错误！${Color_Off}"
+    read -r -p "确认使用吗？[y/N]" response
+    response=${response:"N"}
+    if [[ "$response" =~ ^([yY][eE][sS][yY])$ ]]
+    then
+        git config --global credential.helper store && config_success
+    else
+        echo -e "${BRed}放弃配置此项${Color_Off}"
+    fi
+
 }
 
 conda_pip_sources() {
@@ -420,11 +429,11 @@ vmware() {
     cd ~
     FOLDER="${HOME}/linux-assistant/vmware-package"
     if [ ! -d "$FOLDER" ]; then
-        git clone https://gitlab.com/borninfreedom/vmware-package.git ~/linux-assistant/vmware-package
+        git clone https://gitee.com/borninfreedom/vmware-package.git ~/linux-assistant/vmware-package
     else
         [ ! -f "${FOLDER}/vmware.bundle" ] \
         && rm -rf "${FOLDER}" \
-        && git clone https://gitlab.com/borninfreedom/vmware-package.git ~/linux-assistant/vmware-package
+        && git clone https://gitee.com/borninfreedom/vmware-package.git ~/linux-assistant/vmware-package
     fi
 
     cd ~/linux-assistant/vmware-package
@@ -436,6 +445,44 @@ vmware() {
     echo "2.  YF390-0HF8P-M81RQ-2DXQE-M2UT6"
     echo "3.  ZF71R-DMX85-08DQY-8YMNC-PPHV8"
 
+}
+
+cuda() {
+    echo -e "${BGreen}将要安装cuda10.1 update2版本${Color_Off}"
+    cd
+    wget http://developer.download.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.243_418.87.00_linux.run
+    sudo sh cuda_10.1.243_418.87.00_linux.run
+    success
+    rm -rf ~/cuda_10.1.243_418.87.00_linux.run
+
+    echo -e "${BGreen}将要安装cudnn7.6.5，安装包较大，请耐心等待。${Color_Off}"
+    cd ~
+    FOLDER="${HOME}/linux-assistant/cudnn7-package"
+    if [ ! -d "$FOLDER" ]; then
+        git clone https://gitee.com/borninfreedom/cudnn7-package.git ~/linux-assistant/cudnn7-package
+    else
+        [ ! -f "${FOLDER}/cudnn.tgz" ] \
+        && rm -rf "${FOLDER}" \
+        && git clone https://gitee.com/borninfreedom/cudnn7-package.git ~/linux-assistant/cudnn7-package
+    fi
+
+    cd ~/linux-assistant/cudnn7-package
+    tar -xzvf cudnn.tgz
+    sudo cp ~/linux-assistant/cudnn7-package/cuda/include/cudnn*.h /usr/local/cuda/include
+    sudo cp ~/linux-assistant/cudnn7-package/cuda/lib64/libcudnn* /usr/local/cuda/lib64
+    sudo chmod a+r /usr/local/cuda/include/cudnn*.h /usr/local/cuda/lib64/libcudnn*
+    success
+    rm -rf ~/linux-assistant/cudnn7-package
+}
+
+qv2ray_echo() {
+    echo -e "${BRed}提示：请新打开一个终端，运行${Color_Off}"
+    echo "sudo ./qv2ray.AppImage"
+    echo -e "${BRed}在你的桌面上有一个Qv2ray的使用说明，请阅读并按照配置.${Color_Off}"
+    echo -e "${BRed}关闭Qv2ray软件窗口，并运行${Color_Off}"
+    echo "sudo mv ~/vcore ~/.config/qv2ray"
+    echo -e "${BRed}然后运行下面指令，重新打开Qv2ray。${Color_Off}"
+    echo "sudo ./qv2ray.AppImage"
 }
 
 existstatus=$?
@@ -458,10 +505,9 @@ if [ $existstatus = 0 ]; then
     echo $SELECT | grep "15" && through_git_appimage cajviewer
     echo $SELECT | grep "16" && sudo apt install gnome-tweak-tool
 
-    selects 18 hpdriver
+   # selects 18 hpdriver
     
-
-    echo $SELECT | grep "50" && gitproxy
+ 
     echo $SELECT | grep "52" && gitpush_store_passwd
     echo $SELECT | grep "53" && conda_pip_sources
     echo $SELECT | grep "54" && gsettings set org.gnome.shell.extensions.dash-to-dock click-action 'minimize'
@@ -475,6 +521,26 @@ if [ $existstatus = 0 ]; then
     echo $SELECT | grep "17" && through_git_deb sogou && echo -e "${BGreen}please restart to make sogou available.${Color_Off}"
     echo $SELECT | grep "07" && qv2ray
     
+    selects 20 cuda
+
+
+
+    # it's always at last. Otherwise there is a bug
+    echo $SELECT | grep "50" && gitproxy
+
+
+    # it's the notes for some software below
+    echo $SELECT | grep "19" && echo -e "${BGreen}VMWare注册码：${Color_Off}"
+    echo "1.  ZF3R0-FHED2-M80TY-8QYGC-NPKYF"
+    echo "2.  YF390-0HF8P-M81RQ-2DXQE-M2UT6"
+    echo "3.  ZF71R-DMX85-08DQY-8YMNC-PPHV8"
+
+    echo ""
+    echo $SELECT | grep "17" && echo -e "${BGreen}请打开地区和语言设置->管理已安装语言->系统输入法框架，更改为fcitx，然后重启。重启后在输入法中添加搜狗，具体操作请参考：https://blog.csdn.net/lupengCSDN/article/details/80279177。只参考系统设置部分就可以，安装部分已经完成。"
+    
+    echo ""
+    echo $SELECT | grep "07" && qv2ray_echo
+
 else
     echo "取消"
 fi
