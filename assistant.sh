@@ -3,7 +3,7 @@ sudo apt install -y xterm
 resize -s 40 80
 #terminator --geometry=485x299 -b
 SELECT=$(whiptail --title "Ubuntu助手" --checklist \
-"选择要安装的软件或电脑配置（可多选，空格键选择，Tab键跳转)" 40 70 26 \
+"选择要安装的软件或电脑配置（可多选，空格键选择，Tab键跳转)" 40 80 30 \
 "01" "proxychains" OFF \
 "02" "VSCode" OFF \
 "03" "PyCharm Community" OFF \
@@ -23,6 +23,8 @@ SELECT=$(whiptail --title "Ubuntu助手" --checklist \
 "17" "Sougou pinyin" OFF \
 "19" "VMWare Workstation Pro 16" OFF \
 "20" "CUDA 10.1, cudnn 7.6.5, (only Ubuntu 18)" OFF \
+"21" "CUDA 9.1, Ubuntu18 仓库提供" OFF \
+"22" "NVIDIA显卡驱动（选择此项安装CUDA中就不需选择Driver了）" OFF \
 "==" "============================================" OFF \
 "==" "============================================" OFF \
 "50" "git clone设置socks5代理" OFF \
@@ -120,13 +122,13 @@ through_git_sh() {
         mkdir -p $ROOT_DIR
     else
         if [ ! -d "$ROOT_DIR/$1-package" ];then
-            git clone https://gitlab.com/borninfreedom/$1-package.git ~/linux-assistant/$1-package
+            git clone https://gitee.com/borninfreedom/$1-package.git ~/linux-assistant/$1-package
         fi
     fi
 
     cd $FILE_DIR
     if [ ! -f "$1.sh" ];then
-        git clone https://gitlab.com/borninfreedom/$1-package.git ~/linux-assistant/$1-package
+        git clone https://gitee.com/borninfreedom/$1-package.git ~/linux-assistant/$1-package
     fi
     
     cd ~/linux-assistant/$1-package
@@ -174,7 +176,7 @@ function proxychains {
 	sudo make && sudo make install
 	sudo cp ./src/proxychains.conf /etc/proxychains.conf
 	echo -e "${BRed}请执行 sudo vi /etc/proxychains.conf ，将最后的 socks4 127.0.0.1 9095 改为 socks5 127.0.0.1 1089 ，其中 1089是qv2ray 6.0 版本 socks5 代理默认的开放端口，如果不确定自己的端口号，请查看后再输入。${Color_Off}"
-    rm -rf proxychains-ng
+    rm -rf ~/linux-assistant/proxychains-ng
 }
 
 function redshift {		# the former of { must have a space
@@ -282,16 +284,26 @@ function qq {
 
 
 function xiangrikui {
-    echo -e "${BYellow}将要安装向日葵远控${Color_Off}" && sleep 1s \
-	&& sudo apt install -y git \
-    && cd ~ \
-    && git clone https://gitee.com/borninfreedom/xiangrikui-package.git ~/linux-assistant/xiangrikui-package\
-    && cd ~/linux-assistant/xiangrikui-package \
-    && sudo dpkg -i xiangrikui.deb \
-    && sudo apt -f install \
-    &&  success \
-    && cd ~/linux-assistant \
-    && rm -rf xiangrikui-package
+    echo -e "${BGreen}将要安装向日葵远控${Color_Off}" && sleep 1s 
+	sudo apt install -y git 
+    cd ~
+
+    FOLDER="${HOME}/linux-assistant/xiangrikui-package"
+    if [ ! -d "$FOLDER" ]; then
+        git clone https://gitee.com/borninfreedom/xiangrikui-package.git ~/linux-assistant/xiangrikui-package
+    else
+        [ ! -f "${FOLDER}/xiangrikui.deb" ] \
+        && rm -rf "${FOLDER}" \
+        && git clone https://gitee.com/borninfreedom/xiangrikui-package.git ~/linux-assistant/xiangrikui-package
+    fi
+
+   # git clone https://gitee.com/borninfreedom/xiangrikui-package.git ~/linux-assistant/xiangrikui-package
+    cd ~/linux-assistant/xiangrikui-package 
+    sudo dpkg -i xiangrikui.deb 
+    sudo apt -f install 
+    sudo apt -f install
+    success 
+    rm -rf ~/linux-assistant/xiangrikui-package
 }
 function pycharm-cmu {
     echo -e "${BGreen}将要安装PyCharm-Community,git代理可能会影响下载。安装包较大，请耐心等待！${Color_Off}" && sleep 1s
@@ -395,7 +407,6 @@ function gitproxy {
 function gitpush_store_passwd {
     echo -e "${BRed}如果您的Gitee、GitHub、Gitlab不是同用户名、同密码，使用这项会造成上传错误！${Color_Off}"
     read -r -p "确认使用吗？[y/N]" response
-    response=${response:"N"}
     if [[ "$response" =~ ^([yY][eE][sS][yY])$ ]]
     then
         git config --global credential.helper store && config_success
@@ -456,7 +467,7 @@ cuda() {
     echo "export PATH=$PATH:/usr/local/cuda-10.1/" >> ~/.bashrc
     echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-10.1/lib64" >> ~/.bashrc
     source ~/.bashrc
-    rm -rf ~/cuda_10.1.243_418.87.00_linux.run
+    #rm -rf ~/cuda_10.1.243_418.87.00_linux.run
 
     echo -e "${BGreen}将要安装cudnn7.6.5，安装包较大，请耐心等待。${Color_Off}"
     cd ~
@@ -488,12 +499,21 @@ qv2ray_echo() {
     echo "sudo ./qv2ray.AppImage"
 }
 
+nvidia-driver() {
+    echo -e "${BGreen}将要安装NVIDIA显卡驱动${Color_Off}"
+    sudo add-apt-repository ppa:graphics-drivers/ppa
+    sudo apt update
+    sudo ubuntu-drivers autoinstall   # for recommended
+    # sudo  apt install nvidia-driver-xxx  # for self-assignment
+    success
+}
+
 existstatus=$?
 if [ $existstatus = 0 ]; then
    # echo $SELECT | grep "7" && echo "test success"
    
     echo $SELECT | grep "02" && vscode
-    echo $SELECT | grep "03" && pycharm-cmu
+    
     echo $SELECT | grep "04" && redshift
     echo $SELECT | grep "05" && wps
     echo $SELECT | grep "06" && terminator
@@ -525,13 +545,14 @@ if [ $existstatus = 0 ]; then
     echo $SELECT | grep "07" && qv2ray
     
     selects 20 cuda
+    echo $SELECT | grep "21" && sudo apt -y install nvidia-cuda-toolkit
+    selects 22 nvidia-driver
 
-
-
+    ##################################################
     # it's always at last. Otherwise there is a bug
+    echo $SELECT | grep "03" && pycharm-cmu
     echo $SELECT | grep "50" && gitproxy
-
-
+    #####################################################
     # it's the notes for some software below
     echo $SELECT | grep "19" && echo -e "${BGreen}VMWare注册码：${Color_Off}"
     echo $SELECT | grep "19" && echo "1.  ZF3R0-FHED2-M80TY-8QYGC-NPKYF"
@@ -543,7 +564,10 @@ if [ $existstatus = 0 ]; then
     
     echo ""
     echo $SELECT | grep "07" && qv2ray_echo
-
+    echo ""
+    echo $SELECT | grep "22" && echo -e "${BGreen}请不要再更新内核，有可能导致显卡驱动失效。如果启动过程有任何问题，或者没有问题，也推荐按照此篇博客进行配置：https://blog.csdn.net/bornfree5511/article/details/109275982${Color_Off}"
+    echo ""
+    echo $SELECT | grep "01" && echo -e "${BRed}proxychains配置：请执行 sudo vi /etc/proxychains.conf ，将最后的 socks4 127.0.0.1 9095 改为 socks5 127.0.0.1 1089 ，其中 1089是qv2ray 6.0 版本 socks5 代理默认的开放端口，如果不确定自己的端口号，请查看后再输入。${Color_Off}"
 else
     echo "取消"
 fi
