@@ -25,6 +25,10 @@ SELECT=$(whiptail --title "Ubuntu助手" --checklist \
 "20" "CUDA 10.1, cudnn 7.6.5, (only Ubuntu 18)" OFF \
 "21" "CUDA 9.1, Ubuntu18 仓库提供" OFF \
 "22" "NVIDIA显卡驱动（选择此项安装CUDA中就不需选择Driver了）" OFF \
+"23" "Simple Screen Recorder录屏软件" OFF \
+"24" "VLC媒体播放器" OFF \
+"25" "百度网盘" OFF \
+"26" "RoboWare" OFF \
 "==" "============================================" OFF \
 "==" "============================================" OFF \
 "50" "git clone设置socks5代理" OFF \
@@ -106,6 +110,7 @@ through_git_deb() {
 
     cd ~/linux-assistant/$1-package
     sudo dpkg -i $1.deb
+    sudo apt -f install
     sudo apt -f install
     success
     rm -rf ~/linux-assistant/$1-package
@@ -508,7 +513,36 @@ nvidia-driver() {
     success
 }
 
+roboware() {
+    echo -e "${BGreen}将要安装RoboWare Studio 和 RoboWare Viewer, 安装包较大，请耐心等待。${Color_Off}" && sleep 1s
+    sudo apt install -y git
+    cd ~
+    FOLDER="${HOME}/linux-assistant/roboware-package"
+    if [ ! -d "$FOLDER" ]; then
+        git clone https://gitee.com/borninfreedom/roboware-package.git ~/linux-assistant/roboware-package
+    else
+        [ ! -f "${FOLDER}/roboware-studio*.deb" ] \
+        && rm -rf "${FOLDER}" \
+        && git clone https://gitee.com/borninfreedom/roboware-package.git ~/linux-assistant/roboware-package
+    fi
+
+    cd ~/linux-assistant/roboware-package
+    sudo dpkg -i roboware-studio*.deb
+    sudo apt -f install
+    sudo apt -f install
+    sudo dpkg -i roboware-viewer*.deb
+    sudo apt -f install
+    sudo apt -f install
+    sudo mv RoboWare*.pdf ~/Desktop ||  sudo mv RoboWare*.pdf ~/桌面   
+    rm -rf ~/linux-assistant/roboware-package
+    echo -e "${BGreen}软件说明文档已经放到桌面。${Color_Off}"
+
+}
+
+
+#################################################################################################################
 existstatus=$?
+
 if [ $existstatus = 0 ]; then
    # echo $SELECT | grep "7" && echo "test success"
    
@@ -542,12 +576,25 @@ if [ $existstatus = 0 ]; then
     echo $SELECT | grep "01" && proxychains
     selects 19 vmware
     echo $SELECT | grep "17" && through_git_deb sogou && echo -e "${BGreen}please restart to make sogou available.${Color_Off}"
+    echo $SELECT | grep "25" && through_git_deb baidunetdisk
     echo $SELECT | grep "07" && qv2ray
     
     selects 20 cuda
     echo $SELECT | grep "21" && sudo apt -y install nvidia-cuda-toolkit
     selects 22 nvidia-driver
-
+    echo $SELECT | grep "23" && sudo add-apt-repository ppa:maarten-baert/simplescreenrecorder && sudo apt-get -y update && sudo apt-get -y install simplescreenrecorder
+    echo $SELECT | grep "24" && sudo add-apt-repository ppa:videolan/master-daily && sudo apt-get -y update && sudo apt-get install -y vlc
+    
+    selects 26 roboware
+    
+    
+    
+    
+    
+    
+    
+    
+    
     ##################################################
     # it's always at last. Otherwise there is a bug
     echo $SELECT | grep "03" && pycharm-cmu
@@ -568,6 +615,12 @@ if [ $existstatus = 0 ]; then
     echo $SELECT | grep "22" && echo -e "${BGreen}请不要再更新内核，有可能导致显卡驱动失效。如果启动过程有任何问题，或者没有问题，也推荐按照此篇博客进行配置：https://blog.csdn.net/bornfree5511/article/details/109275982${Color_Off}"
     echo ""
     echo $SELECT | grep "01" && echo -e "${BRed}proxychains配置：请执行 sudo vi /etc/proxychains.conf ，将最后的 socks4 127.0.0.1 9095 改为 socks5 127.0.0.1 1089 ，其中 1089是qv2ray 6.0 版本 socks5 代理默认的开放端口，如果不确定自己的端口号，请查看后再输入。${Color_Off}"
+    echo ""
+    echo $SELECT | grep "26" && echo -e "${BGreen}软件说明文档已经放到桌面。${Color_Off}"
+
+
+##################################################################################################################################
+
 else
     echo "取消"
 fi
