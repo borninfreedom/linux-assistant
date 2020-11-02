@@ -1,4 +1,4 @@
 git add .
-git commit -m 's'
+git commit -m "$(date)"
 git push gitee master
 git push github master
