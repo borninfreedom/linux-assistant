@@ -40,6 +40,43 @@ SELECT=$(whiptail --title "Ubuntu助手" --checklist \
 3>&1 1>&2 2>&3
 )
 
+#terminator --geometry=485x299 -b
+SELECT=$(whiptail --title "Ubuntu助手" --checklist \
+"选择要安装的软件或电脑配置（可多选，空格键选择，Tab键跳转)" 50 90 35 \
+"CUDA 9.1" "Ubuntu18 仓库提供" OFF \
+"CUDA 10.1, cudnn 7.6.5" "仅限于Ubuntu18" OFF \
+"CAJViewer" "知网文献阅读器" OFF \
+"Google Chrome" "市占率最高的浏览器" OFF \
+"Gnome Tweak Tool" "Ubuntu18设置软件" OFF \
+"Miniconda3" "Python虚拟环境管理器" OFF \
+"mendeley" "文献管理软件" OFF \
+"NVIDIA显卡驱动" "    安装此项后安装CUDA时就不需选择Driver了" OFF \
+"proxychains" "代理流量软件" OFF \
+"PyCharm Community" "Python IDE，功能强大" OFF \
+"QQ" "Linux版QQ" OFF \
+"Qv2ray" "v2ray代理软件" OFF \
+"RoboWare" "ROS开发IDE" OFF \
+"RedShift-GTK" "护眼软件，可根据时间自动调节色温" OFF \
+"Simple Screen Recorder" "Linux优秀录屏软件" OFF \
+"Terminator" "可一窗口多开的终端模拟器" OFF \
+"TeamViewer" "远程协助软件" OFF \
+"VirtualBox" "虚拟机软件" OFF \
+"VMWare Pro 16" "虚拟机软件，功能强大" OFF \
+"VSCode" "代码编辑器，功能强大、易用" OFF \
+"VLC" "媒体播放器" OFF \
+"WPS" "Linux版WPS" OFF \
+"百度网盘" "    Linux版百度网盘" OFF \
+"搜狗拼音输入法" "       Linux版搜狗拼音输入法" OFF \
+"向日葵远控" "     国产远程协助软件，更加易用" OFF \
+"~~~~~~~~~~~~~~~~~~~~~~~~~~" "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" OFF \
+"conda,pip设置国内源" "     可显著提供conda/pip install 速度" OFF \
+"git设置socks5代理" "    可显著提高git clone速度" OFF \
+"git取消代理" "    删除代理设置" OFF \
+"git push记住用户名和密码" "      使用https方式不用每次输入密码和用户名" OFF \
+"Ubuntu18再次点击图标最小化" "    再次点击图标时会最小化窗口" OFF \
+"Ubuntu18取消再次点击图标最小化" "恢复默认，再次点击图标没有反应" OFF \
+3>&1 1>&2 2>&3
+)
 
 Color_Off='\033[0m'       # Text Reset
 
