@@ -1,9 +1,11 @@
 #!/bin/bash
 sudo apt install -y xterm
-resize -s 50 90
+sudo apt install -y zenity
+touch ~/Desktop/Ubuntu助手附加说明.txt || touch ~/桌面/Ubuntu助手附加说明.txt
+resize -s 45 90
 #terminator --geometry=485x299 -b
 SELECT=$(whiptail --title "Ubuntu助手" --checklist \
-"选择要安装的软件或电脑配置（可多选，空格键选择，Tab键跳转)" 50 90 35 \
+"选择要安装的软件或电脑配置（可多选，空格键选择，Tab键跳转)" 45 90 35 \
 "CUDA 9.1" "Ubuntu18 仓库提供" OFF \
 "CUDA 10.1, cudnn 7.6.5" "仅限于Ubuntu18" OFF \
 "CAJViewer" "知网文献阅读器" OFF \
@@ -29,6 +31,7 @@ SELECT=$(whiptail --title "Ubuntu助手" --checklist \
 "百度网盘" "    Linux版百度网盘" OFF \
 "搜狗拼音输入法" "       Linux版搜狗拼音输入法" OFF \
 "向日葵远控" "     国产远程协助软件，更加易用" OFF \
+"psensor" "温度监控软件" OFF \
 "~~~~~~~~~~~~~~~~~~~~~~~~~~" "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" OFF \
 "conda,pip设置国内源" "     可显著提供conda/pip install 速度" OFF \
 "git设置socks5代理" "    可显著提高git clone速度" OFF \
@@ -72,6 +75,10 @@ UPurple='\033[4;35m'      # Purple
 UCyan='\033[4;36m'        # Cyan
 UWhite='\033[4;37m'       # White
 
+
+echo_out() {
+    echo "$1" >> ~/Desktop/Ubuntu助手附加说明.txt || echo "$1" >> ~/桌面/Ubuntu助手附加说明.txt
+}
 
 function success {
 	# if you want to use colored font display, must add -e parameter.
@@ -456,10 +463,10 @@ vmware() {
     chmod a+x vmware.bundle
     sudo ./vmware.bundle
     rm -rf ~/linux-assistant/vmware-package
-    echo -e "${BGreen}注册码:${Color_Off}"
-    echo "1.  ZF3R0-FHED2-M80TY-8QYGC-NPKYF"
-    echo "2.  YF390-0HF8P-M81RQ-2DXQE-M2UT6"
-    echo "3.  ZF71R-DMX85-08DQY-8YMNC-PPHV8"
+    echo_out "【VMware注册码】"
+    echo_out "ZF3R0-FHED2-M80TY-8QYGC-NPKYF"
+    echo_out "YF390-0HF8P-M81RQ-2DXQE-M2UT6"
+    echo_out "ZF71R-DMX85-08DQY-8YMNC-PPHV8"
 
 }
 
@@ -535,17 +542,27 @@ roboware() {
     sudo apt -f install
     sudo mv RoboWare*.pdf ~/Desktop ||  sudo mv RoboWare*.pdf ~/桌面
     rm -rf ~/linux-assistant/roboware-package
-    echo -e "${BGreen}软件说明文档已经放到桌面。${Color_Off}"
+
+    zenity --warning \
+    --text="RoboWare软件的说明文档已经放到桌面。"
 
 }
 
+
+psensor() {
+    echo -e "${BGreen}将要安装psensor${Color_Off}" && sleep 1s
+    sudo apt install -y psensor
+    success
+    echo_out "【psensor安装成功】"
+    echo_out "nihao"
+}
 
 #################################################################################################################
 existstatus=$?
 
 if [ $existstatus = 0 ]; then
    # echo $SELECT | grep "7" && echo "test success"
-
+    selects "psensor" psensor
     echo $SELECT | grep "VSCode" && vscode
 
     echo $SELECT | grep "RedShift-GTK" && redshift
@@ -618,7 +635,10 @@ if [ $existstatus = 0 ]; then
     echo ""
     echo $SELECT | grep "RoboWare" && echo -e "${BGreen}软件说明文档已经放到桌面。${Color_Off}"
 
-
+    zenity --warning \
+    --text="部分程序还需要一些附加操作才能安装成功，请阅读你的桌面上的【Ubuntu助手附加说明.txt】文件" 
+    
+    
 ##################################################################################################################################
 
 else
