@@ -1,48 +1,11 @@
 #!/bin/bash
 sudo apt install -y xterm
-resize -s 50 80
+sudo apt install -y zenity
+touch ~/Desktop/Ubuntu助手附加说明.txt || touch ~/桌面/Ubuntu助手附加说明.txt
+resize -s 45 90
 #terminator --geometry=485x299 -b
 SELECT=$(whiptail --title "Ubuntu助手" --checklist \
-"选择要安装的软件或电脑配置（可多选，空格键选择，Tab键跳转)" 50 80 35 \
-"01" "proxychains" OFF \
-"02" "VSCode" OFF \
-"03" "PyCharm Community" OFF \
-"04" "RedShift-GTK" OFF \
-"05" "WPS" OFF \
-"06" "Terminator (Ubuntu 16不建议装，代码配色有问题)" OFF \
-"07" "Qv2ray" OFF \
-"08" "TeamViewer" OFF \
-"09" "向日葵远控" OFF \
-"10" "QQ" OFF \
-"11" "mendeley文献管理软件" OFF \
-"12" "VirtualBox" OFF \
-"13" "Google Chrome" OFF \
-"14" "Miniconda3" OFF \
-"15" "CAJViewer" OFF \
-"16" "Gnome Tweak Tool" OFF \
-"17" "Sougou pinyin" OFF \
-"19" "VMWare Workstation Pro 16" OFF \
-"20" "CUDA 10.1, cudnn 7.6.5, (only Ubuntu 18)" OFF \
-"21" "CUDA 9.1, Ubuntu18 仓库提供" OFF \
-"22" "NVIDIA显卡驱动（选择此项安装CUDA中就不需选择Driver了）" OFF \
-"23" "Simple Screen Recorder录屏软件" OFF \
-"24" "VLC媒体播放器" OFF \
-"25" "百度网盘" OFF \
-"26" "RoboWare" OFF \
-"==" "============================================" OFF \
-"==" "============================================" OFF \
-"50" "git clone设置socks5代理" OFF \
-"51" "git clone取消代理" OFF \
-"52" "git push记住用户名和密码（慎用）" OFF \
-"53" "conda,pip设置国内源" OFF \
-"54" "Ubuntu 18 再次点击图标最小化" OFF \
-"55" "Ubuntu 18 取消再次点击图标最小化" OFF \
-3>&1 1>&2 2>&3
-)
-
-#terminator --geometry=485x299 -b
-SELECT=$(whiptail --title "Ubuntu助手" --checklist \
-"选择要安装的软件或电脑配置（可多选，空格键选择，Tab键跳转)" 50 90 35 \
+"选择要安装的软件或电脑配置（可多选，空格键选择，Tab键跳转)" 45 90 35 \
 "CUDA 9.1" "Ubuntu18 仓库提供" OFF \
 "CUDA 10.1, cudnn 7.6.5" "仅限于Ubuntu18" OFF \
 "CAJViewer" "知网文献阅读器" OFF \
@@ -68,6 +31,7 @@ SELECT=$(whiptail --title "Ubuntu助手" --checklist \
 "百度网盘" "    Linux版百度网盘" OFF \
 "搜狗拼音输入法" "       Linux版搜狗拼音输入法" OFF \
 "向日葵远控" "     国产远程协助软件，更加易用" OFF \
+"psensor" "温度监控软件" OFF \
 "~~~~~~~~~~~~~~~~~~~~~~~~~~" "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" OFF \
 "conda,pip设置国内源" "     可显著提供conda/pip install 速度" OFF \
 "git设置socks5代理" "    可显著提高git clone速度" OFF \
@@ -77,6 +41,7 @@ SELECT=$(whiptail --title "Ubuntu助手" --checklist \
 "Ubuntu18取消再次点击图标最小化" "恢复默认，再次点击图标没有反应" OFF \
 3>&1 1>&2 2>&3
 )
+
 
 Color_Off='\033[0m'       # Text Reset
 
@@ -110,6 +75,10 @@ UPurple='\033[4;35m'      # Purple
 UCyan='\033[4;36m'        # Cyan
 UWhite='\033[4;37m'       # White
 
+
+echo_out() {
+    echo "$1" >> ~/Desktop/Ubuntu助手附加说明.txt || echo "$1" >> ~/桌面/Ubuntu助手附加说明.txt
+}
 
 function success {
 	# if you want to use colored font display, must add -e parameter.
@@ -172,7 +141,7 @@ through_git_sh() {
     if [ ! -f "$1.sh" ];then
         git clone https://gitee.com/borninfreedom/$1-package.git ~/linux-assistant/$1-package
     fi
-    
+
     cd ~/linux-assistant/$1-package
     chmod a+x $1.sh
     ./$1.sh
@@ -198,7 +167,7 @@ through_git_appimage() {
     if [ ! -f "$1.sh" ];then
         git clone https://gitee.com/borninfreedom/$1-package.git ~/linux-assistant/$1-package
     fi
-    
+
     cd ~/linux-assistant/$1-package
     cp $1.AppImage ~/Desktop || cp $1.AppImage ~/桌面
     cd ~/Desktop || cd ~/桌面
@@ -209,8 +178,8 @@ through_git_appimage() {
 
 
 function proxychains {
-	echo -e "${BYellow}将要安装proxychains。${Color_Off}" && sleep 1s 
-	cd ~ 
+	echo -e "${BYellow}将要安装proxychains。${Color_Off}" && sleep 1s
+	cd ~
 	sudo apt install -y gcc git vim cmake
 	git clone https://github.com/rofl0r/proxychains-ng.git ~/linux-assistant/proxychains-ng
 	cd ~/linux-assistant/proxychains-ng
@@ -225,8 +194,8 @@ function redshift {		# the former of { must have a space
 	echo -e "${BGreen}Install redshift${Color_Off}" && sleep 1s \
 	# -y parameter indicates that you auto select yes.
 	sudo apt install -y redshift-gtk && echo -e "${BGreen}安装成功${Color_Off}"
-	# when you exec a command, shell will return a flag that indicates whether exec successfully. if success ,return 0, otherwise 1 default. you can use 
-	# $? to extract the flag. 
+	# when you exec a command, shell will return a flag that indicates whether exec successfully. if success ,return 0, otherwise 1 default. you can use
+	# $? to extract the flag.
 	# the role of && is  if $?==0, then exec next cmd.
 	# the role of || is, if $?!=0, then exec next cmd.
 }
@@ -251,39 +220,39 @@ function wps {
 }
 
 function vscode {
-    echo -e "${BGreen}将要安装VSCode${Color_Off}" && sleep 1s 
-	sudo apt install -y git 
-    cd ~ 
-    git clone https://gitee.com/borninfreedom/vscode-packages.git 
-    cd vscode-packages 
-    sudo dpkg -i vscode.deb 
-    sudo apt -f install 
-    success 
-    cd ~/linux-assistant 
+    echo -e "${BGreen}将要安装VSCode${Color_Off}" && sleep 1s
+	sudo apt install -y git
+    cd ~
+    git clone https://gitee.com/borninfreedom/vscode-packages.git
+    cd vscode-packages
+    sudo dpkg -i vscode.deb
+    sudo apt -f install
+    success
+    cd ~/linux-assistant
     rm -rf vscode-packages
 }
 
 function chrome {
-    echo -e "${BYellow}将要安装Google Chrome${Color_Off}" && sleep 1s 
-	sudo apt install -y git 
-    cd ~ 
+    echo -e "${BYellow}将要安装Google Chrome${Color_Off}" && sleep 1s
+	sudo apt install -y git
+    cd ~
     git clone https://gitee.com/borninfreedom/chrome-package.git ~/linux-assistant/chrome-package
-    cd ~/linux-assistant/chrome-package 
-    sudo dpkg -i chrome.deb 
-    sudo apt -f install 
+    cd ~/linux-assistant/chrome-package
+    sudo dpkg -i chrome.deb
+    sudo apt -f install
     success
     cd ~/linux-assistant
     rm -rf chrome-package
 }
 
 function mendeley {
-    echo -e "${BGreen}将要安装mendeley文献管理软件${Color_Off}" && sleep 1s 
-	sudo apt install -y git 
-    cd ~ 
+    echo -e "${BGreen}将要安装mendeley文献管理软件${Color_Off}" && sleep 1s
+	sudo apt install -y git
+    cd ~
     git clone https://gitee.com/borninfreedom/mendeley-package.git ~/linux-assistant/mendeley-package
-    cd ~/linux-assistant/mendeley-package 
-    sudo dpkg -i mendeley.deb 
-    sudo apt -f install 
+    cd ~/linux-assistant/mendeley-package
+    sudo dpkg -i mendeley.deb
+    sudo apt -f install
     success
     rm -rf ~/linux-assistant/mendeley-package
 }
@@ -302,9 +271,9 @@ function teamviewer {
 }
 
 function qq {
-    echo -e "${BGreen}将要安装QQ${Color_Off}" && sleep 1s 
-	sudo apt install -y git 
-    cd ~ 
+    echo -e "${BGreen}将要安装QQ${Color_Off}" && sleep 1s
+	sudo apt install -y git
+    cd ~
 
     FOLDER="${HOME}/linux-assistant/qq-package"
     if [ ! -d "$FOLDER" ]; then
@@ -316,18 +285,18 @@ function qq {
     fi
 
     #git clone https://gitlab.com/borninfreedom/qq-package.git ~/linux-assistant/qq-package
-    cd ~/linux-assistant/qq-package 
-    sudo dpkg -i qq.deb 
-    sudo apt -f install 
-    success 
-    cd ~/linux-assistant 
+    cd ~/linux-assistant/qq-package
+    sudo dpkg -i qq.deb
+    sudo apt -f install
+    success
+    cd ~/linux-assistant
     rm -rf qq-package
 }
 
 
 function xiangrikui {
-    echo -e "${BGreen}将要安装向日葵远控${Color_Off}" && sleep 1s 
-	sudo apt install -y git 
+    echo -e "${BGreen}将要安装向日葵远控${Color_Off}" && sleep 1s
+	sudo apt install -y git
     cd ~
 
     FOLDER="${HOME}/linux-assistant/xiangrikui-package"
@@ -340,13 +309,14 @@ function xiangrikui {
     fi
 
    # git clone https://gitee.com/borninfreedom/xiangrikui-package.git ~/linux-assistant/xiangrikui-package
-    cd ~/linux-assistant/xiangrikui-package 
-    sudo dpkg -i xiangrikui.deb 
-    sudo apt -f install 
+    cd ~/linux-assistant/xiangrikui-package
+    sudo dpkg -i xiangrikui.deb
     sudo apt -f install
-    success 
+    sudo apt -f install
+    success
     rm -rf ~/linux-assistant/xiangrikui-package
 }
+
 function pycharm-cmu {
     echo -e "${BGreen}将要安装PyCharm-Community,git代理可能会影响下载。安装包较大，请耐心等待！${Color_Off}" && sleep 1s
 	sudo apt install -y git
@@ -367,14 +337,14 @@ function pycharm-cmu {
         git clone https://gitee.com/borninfreedom/pycharm-cmu-packages.git ~/linux-assistant/pycharm-cmu-packages
     fi
 
-    
+
     cd ~/linux-assistant/pycharm-cmu-packages
     tar -zxvf pycharm.tar.gz
-    cd pycharm
-    cd bin
+    mv pycharm ~
+    cd ~/pycharm/bin
+    echo_out "【Pycharm】"
+    echo_out "pycharm的安装包已经放到 ~/pycharm 路径。将pycharm图标添加到启动器，请参考https://blog.csdn.net/bornfree5511/article/details/103985989"
     ./pycharm.sh
-    success
-    rm -rf pycharm-cmu-packages
 }
 
 function qv2ray {
@@ -399,13 +369,11 @@ function qv2ray {
     mv ~/linux-assistant/qv2ray-packages/qv2ray.AppImage ~
     chmod a+x ~/qv2ray.AppImage
 
-    echo -e "${BRed}提示：请新打开一个终端，运行${Color_Off}"
-    echo "sudo ./qv2ray.AppImage"
-    echo -e "${BRed}在你的桌面上有一个Qv2ray的使用说明，请阅读并按照配置.${Color_Off}"
-    echo -e "${BRed}关闭Qv2ray软件窗口，并运行${Color_Off}"
-    echo "sudo mv ~/vcore ~/.config/qv2ray"
-    echo -e "${BRed}然后运行下面指令，重新打开Qv2ray。${Color_Off}"
-    echo "sudo ./qv2ray.AppImage"
+    echo_out "【Qv2ray】"
+    echo_out "请新打开一个终端，运行 ./qv2ray.AppImage"
+    echo_out "在你的桌面上有一个 qv2ray-instruction.pdf 文件，请阅读并按照配置。配置完成后，请关闭Qv2ray软件。"
+    echo_out "然后运行  mv ~/vcore ~/.config/qv2ray"
+    echo_out "登出（logout），重新登录用户，也可以直接重启。（qv2ray设置中如果勾选了‘开机启动’，重新登录后便会自动开启qv2ray）"
 
     rm -rf ~/linux-assistant/qv2ray-packages
 }
@@ -463,7 +431,8 @@ conda_pip_sources() {
     conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
     pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
     config_success
-    echo -e "${BGreen}配置成功，若要修改，执行vi ~/.condarc，vi ~/.config/pip/pip.config${Color_Off}" && sleep 1s
+    echo_out "【conda和pip源设置】"
+    echo_out "若要修改配置文件，执行vi ~/.condarc，vi ~/.config/pip/pip.config"
 }
 
 gitproxy_cancel() {
@@ -493,10 +462,10 @@ vmware() {
     chmod a+x vmware.bundle
     sudo ./vmware.bundle
     rm -rf ~/linux-assistant/vmware-package
-    echo -e "${BGreen}注册码:${Color_Off}"
-    echo "1.  ZF3R0-FHED2-M80TY-8QYGC-NPKYF"
-    echo "2.  YF390-0HF8P-M81RQ-2DXQE-M2UT6"
-    echo "3.  ZF71R-DMX85-08DQY-8YMNC-PPHV8"
+    echo_out "【VMware注册码】"
+    echo_out "ZF3R0-FHED2-M80TY-8QYGC-NPKYF"
+    echo_out "YF390-0HF8P-M81RQ-2DXQE-M2UT6"
+    echo_out "ZF71R-DMX85-08DQY-8YMNC-PPHV8"
 
 }
 
@@ -531,15 +500,15 @@ cuda() {
     rm -rf ~/linux-assistant/cudnn7-package
 }
 
-qv2ray_echo() {
-    echo -e "${BRed}提示：请新打开一个终端，运行${Color_Off}"
-    echo "sudo ./qv2ray.AppImage"
-    echo -e "${BRed}在你的桌面上有一个Qv2ray的使用说明，请阅读并按照配置.${Color_Off}"
-    echo -e "${BRed}关闭Qv2ray软件窗口，并运行${Color_Off}"
-    echo "sudo mv ~/vcore ~/.config/qv2ray"
-    echo -e "${BRed}然后运行下面指令，重新打开Qv2ray。${Color_Off}"
-    echo "sudo ./qv2ray.AppImage"
-}
+# qv2ray_echo() {
+#     echo -e "${BRed}提示：请新打开一个终端，运行${Color_Off}"
+#     echo "sudo ./qv2ray.AppImage"
+#     echo -e "${BRed}在你的桌面上有一个Qv2ray的使用说明，请阅读并按照配置.${Color_Off}"
+#     echo -e "${BRed}关闭Qv2ray软件窗口，并运行${Color_Off}"
+#     echo "sudo mv ~/vcore ~/.config/qv2ray"
+#     echo -e "${BRed}然后运行下面指令，重新打开Qv2ray。${Color_Off}"
+#     echo "sudo ./qv2ray.AppImage"
+# }
 
 nvidia-driver() {
     echo -e "${BGreen}将要安装NVIDIA显卡驱动${Color_Off}"
@@ -570,92 +539,105 @@ roboware() {
     sudo dpkg -i roboware-viewer*.deb
     sudo apt -f install
     sudo apt -f install
-    sudo mv RoboWare*.pdf ~/Desktop ||  sudo mv RoboWare*.pdf ~/桌面   
+    sudo mv RoboWare*.pdf ~/Desktop ||  sudo mv RoboWare*.pdf ~/桌面
     rm -rf ~/linux-assistant/roboware-package
-    echo -e "${BGreen}软件说明文档已经放到桌面。${Color_Off}"
+
+    zenity --warning \
+    --text="RoboWare软件的说明文档已经放到桌面。"
 
 }
 
+
+psensor() {
+    echo -e "${BGreen}将要安装psensor${Color_Off}" && sleep 1s
+    sudo apt install -y psensor
+    success
+
+}
 
 #################################################################################################################
 existstatus=$?
 
 if [ $existstatus = 0 ]; then
    # echo $SELECT | grep "7" && echo "test success"
-   
-    echo $SELECT | grep "02" && vscode
-    
-    echo $SELECT | grep "04" && redshift
-    echo $SELECT | grep "05" && wps
-    echo $SELECT | grep "06" && terminator
-    
-    echo $SELECT | grep "08" && teamviewer
-    echo $SELECT | grep "09" && xiangrikui
-    echo $SELECT | grep "10" && qq
-    echo $SELECT | grep "11" && mendeley
-    echo $SELECT | grep "12" && virtualbox
-    echo $SELECT | grep "13" && chrome
-    echo $SELECT | grep "14" && through_git_sh miniconda
-    echo $SELECT | grep "15" && through_git_appimage cajviewer
-    echo $SELECT | grep "16" && sudo apt install gnome-tweak-tool
+    selects "psensor" psensor
+    echo $SELECT | grep "VSCode" && vscode
+
+    echo $SELECT | grep "RedShift-GTK" && redshift
+    echo $SELECT | grep "WPS" && wps
+    echo $SELECT | grep "Terminator" && terminator
+
+    echo $SELECT | grep "TeamViewer" && teamviewer
+    echo $SELECT | grep "向日葵远控" && xiangrikui
+    echo $SELECT | grep "QQ" && qq
+    echo $SELECT | grep "mendeley" && mendeley
+    echo $SELECT | grep "VirtualBox" && virtualbox
+    echo $SELECT | grep "Google Chrome" && chrome
+    echo $SELECT | grep "Miniconda3" && through_git_sh miniconda
+    echo $SELECT | grep "CAJViewer" && through_git_appimage cajviewer
+    echo $SELECT | grep "Gnome Tweak Tool" && sudo apt install gnome-tweak-tool
 
    # selects 18 hpdriver
-    
- 
-    echo $SELECT | grep "52" && gitpush_store_passwd
-    echo $SELECT | grep "53" && conda_pip_sources
-    echo $SELECT | grep "54" && gsettings set org.gnome.shell.extensions.dash-to-dock click-action 'minimize'
-    echo $SELECT | grep "55" && gsettings set org.gnome.shell.extensions.dash-to-dock click-action 'previews'
 
 
-    selects 51 gitproxy_cancel
+    echo $SELECT | grep "git push记住用户名和密码" && gitpush_store_passwd
+    echo $SELECT | grep "conda,pip设置国内源" && conda_pip_sources
+    echo $SELECT | grep "Ubuntu18再次点击图标最小化" && gsettings set org.gnome.shell.extensions.dash-to-dock click-action 'minimize'
+    echo $SELECT | grep "Ubuntu18取消再次点击图标最小化" && gsettings set org.gnome.shell.extensions.dash-to-dock click-action 'previews'
+
+
+    selects "git取消代理" gitproxy_cancel
+
+    echo $SELECT | grep "proxychains" && proxychains
+    selects "VMWare Pro 16" vmware
+    echo $SELECT | grep "搜狗拼音输入法" && through_git_deb sogou && echo -e "${BGreen}please restart to make sogou available.${Color_Off}"
+    echo $SELECT | grep "百度网盘" && through_git_deb baidunetdisk
     
-    echo $SELECT | grep "01" && proxychains
-    selects 19 vmware
-    echo $SELECT | grep "17" && through_git_deb sogou && echo -e "${BGreen}please restart to make sogou available.${Color_Off}"
-    echo $SELECT | grep "25" && through_git_deb baidunetdisk
-    echo $SELECT | grep "07" && qv2ray
-    
-    selects 20 cuda
-    echo $SELECT | grep "21" && sudo apt -y install nvidia-cuda-toolkit
-    selects 22 nvidia-driver
-    echo $SELECT | grep "23" && sudo add-apt-repository ppa:maarten-baert/simplescreenrecorder && sudo apt-get -y update && sudo apt-get -y install simplescreenrecorder
-    echo $SELECT | grep "24" && sudo add-apt-repository ppa:videolan/master-daily && sudo apt-get -y update && sudo apt-get install -y vlc
-    
-    selects 26 roboware
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+    selects "CUDA 10.1, cudnn 7.6.5" cuda
+    echo $SELECT | grep "CUDA 9.1" && sudo apt -y install nvidia-cuda-toolkit
+    selects "NVIDIA显卡驱动" nvidia-driver
+    echo $SELECT | grep "Simple Screen Recorder" && sudo add-apt-repository ppa:maarten-baert/simplescreenrecorder && sudo apt-get -y update && sudo apt-get -y install simplescreenrecorder
+    echo $SELECT | grep "VLC" && sudo add-apt-repository ppa:videolan/master-daily && sudo apt-get -y update && sudo apt-get install -y vlc
+
+    selects "RoboWare" roboware
+
+
+
+
+
+
+
+
+
     ##################################################
     # it's always at last. Otherwise there is a bug
-    echo $SELECT | grep "03" && pycharm-cmu
-    echo $SELECT | grep "50" && gitproxy
+    echo $SELECT | grep "PyCharm Community" && pycharm-cmu
+    echo $SELECT | grep "Qv2ray" && qv2ray
+    echo $SELECT | grep "git设置socks5代理" && gitproxy
     #####################################################
     # it's the notes for some software below
-    echo $SELECT | grep "19" && echo -e "${BGreen}VMWare注册码：${Color_Off}"
-    echo $SELECT | grep "19" && echo "1.  ZF3R0-FHED2-M80TY-8QYGC-NPKYF"
-    echo $SELECT | grep "19" && echo "2.  YF390-0HF8P-M81RQ-2DXQE-M2UT6"
-    echo $SELECT | grep "19" && echo "3.  ZF71R-DMX85-08DQY-8YMNC-PPHV8"
+    # echo $SELECT | grep "VMWare Pro 16" && echo -e "${BGreen}VMWare注册码：${Color_Off}"
+    # echo $SELECT | grep "VMWare Pro 16" && echo "1.  ZF3R0-FHED2-M80TY-8QYGC-NPKYF"
+    # echo $SELECT | grep "VMWare Pro 16" && echo "2.  YF390-0HF8P-M81RQ-2DXQE-M2UT6"
+    # echo $SELECT | grep "VMWare Pro 16" && echo "3.  ZF71R-DMX85-08DQY-8YMNC-PPHV8"
 
     echo ""
-    echo $SELECT | grep "17" && echo -e "${BGreen}请打开地区和语言设置->管理已安装语言->系统输入法框架，更改为fcitx，然后重启。重启后在输入法中添加搜狗，具体操作请参考：https://blog.csdn.net/lupengCSDN/article/details/80279177。只参考系统设置部分就可以，安装部分已经完成。"
+    echo $SELECT | grep "搜狗拼音输入法" && echo -e "${BGreen}请打开地区和语言设置->管理已安装语言->系统输入法框架，更改为fcitx，然后重启。重启后在输入法中添加搜狗，具体操作请参考：https://blog.csdn.net/lupengCSDN/article/details/80279177。只参考系统设置部分就可以，安装部分已经完成。"
+
+    # echo ""
+    # echo $SELECT | grep "Qv2ray" && qv2ray_echo
+    echo ""
+    echo $SELECT | grep "NVIDIA显卡驱动" && echo -e "${BGreen}请不要再更新内核，有可能导致显卡驱动失效。如果启动过程有任何问题，或者没有问题，也推荐按照此篇博客进行配置：https://blog.csdn.net/bornfree5511/article/details/109275982${Color_Off}"
+    echo ""
+    echo $SELECT | grep "proxychains" && echo -e "${BRed}proxychains配置：请执行 sudo vi /etc/proxychains.conf ，将最后的 socks4 127.0.0.1 9095 改为 socks5 127.0.0.1 1089 ，其中 1089是qv2ray 6.0 版本 socks5 代理默认的开放端口，如果不确定自己的端口号，请查看后再输入。${Color_Off}"
+    # echo ""
+    # echo $SELECT | grep "RoboWare" && echo -e "${BGreen}软件说明文档已经放到桌面。${Color_Off}"
+
+    zenity --warning \
+    --text="部分程序还需要一些附加操作才能安装成功，请阅读你的桌面上的【Ubuntu助手附加说明.txt】文件" 
     
-    echo ""
-    echo $SELECT | grep "07" && qv2ray_echo
-    echo ""
-    echo $SELECT | grep "22" && echo -e "${BGreen}请不要再更新内核，有可能导致显卡驱动失效。如果启动过程有任何问题，或者没有问题，也推荐按照此篇博客进行配置：https://blog.csdn.net/bornfree5511/article/details/109275982${Color_Off}"
-    echo ""
-    echo $SELECT | grep "01" && echo -e "${BRed}proxychains配置：请执行 sudo vi /etc/proxychains.conf ，将最后的 socks4 127.0.0.1 9095 改为 socks5 127.0.0.1 1089 ，其中 1089是qv2ray 6.0 版本 socks5 代理默认的开放端口，如果不确定自己的端口号，请查看后再输入。${Color_Off}"
-    echo ""
-    echo $SELECT | grep "26" && echo -e "${BGreen}软件说明文档已经放到桌面。${Color_Off}"
-
-
+    
 ##################################################################################################################################
 
 else
