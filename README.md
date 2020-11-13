@@ -8,14 +8,14 @@
 * NOTE：Ubuntu助手不兼容terminator，在terminator中不能自动调整窗口大小。在gnome-terminal中测试通过。
 ## 使用方法
 ### 法1
-* 运行
+运行
 ```bash
 cd ~/linux-assistant
 ./assistant.sh
 ```
 
 ### 法2
-* 将'assistant.sh'文件复制到HOME目录
+将'assistant.sh'文件复制到HOME目录
 ```bash
 mv ~/linux-assistant/assistant.sh ~
 ```
@@ -27,18 +27,20 @@ mv ~/linux-assistant/assistant.sh ~
 
 
 ---
+# linux-assistant
+
 * A software named Ubuntu assistant that can direct install apps and config system.
 * NOTE: The APP is not compatible with terminator. It's normal on gnome-terminal, but not on terminator.
 ## 使用方法
-### 法1
-* 运行
+### method 1
+run
 ```bash
 cd ~/linux-assistant
 ./assistant.sh
 ```
 
-### 法2
-* Move the 'assistant.sh' to the HOME folder, the command is 
+### method 2
+Move the 'assistant.sh' to the HOME folder, the command is 
 ```bash
 mv ~/linux-assistant/assistant.sh ~
 ```
