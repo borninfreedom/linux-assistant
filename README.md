@@ -2,7 +2,7 @@
 
 * Ubuntu助手：一键安装软件、进行系统配置
 
-![](https://github.com/borninfreedom/linux-assistant/blob/main/images/linux-assistant.png)
+![](https://github.com/borninfreedom/linux-assistant/blob/master/images/linux-assistant.png)
 
 
 * NOTE：Ubuntu助手不兼容terminator，在terminator中不能自动调整窗口大小。在gnome-terminal中测试通过。
