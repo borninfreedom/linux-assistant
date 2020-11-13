@@ -2,7 +2,7 @@
 
 * Ubuntu助手：一键安装软件、进行系统配置
 
-![Ubuntu助手](https://gitee.com/borninfreedom/linux-assistant/blob/master/images/linux-assistant.png)
+! [Ubuntu助手](https://gitee.com/borninfreedom/linux-assistant/blob/master/images/linux-assistant.png)
 
 ![](https://github.com/borninfreedom/linux-assistant/blob/master/images/linux-assistant.png)
 
