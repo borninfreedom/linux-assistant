@@ -1,7 +1,7 @@
 #!/bin/bash
 sudo apt install -y xterm
 sudo apt install -y zenity
-touch ~/Desktop/Ubuntu助手附加说明.txt || touch ~/桌面/Ubuntu助手附加说明.txt
+#touch ~/Desktop/Ubuntu助手附加说明.txt || touch ~/桌面/Ubuntu助手附加说明.txt
 resize -s 45 90
 #terminator --geometry=485x299 -b
 SELECT=$(whiptail --title "Ubuntu助手" --checklist \
@@ -75,6 +75,13 @@ UPurple='\033[4;35m'      # Purple
 UCyan='\033[4;36m'        # Cyan
 UWhite='\033[4;37m'       # White
 
+
+touch_check() {
+    cd ~/Desktop || cd ~/桌面
+    if [ ! -f "Ubuntu助手附加说明.txt" ];then
+        touch ~/Desktop/Ubuntu助手附加说明.txt || touch ~/桌面/Ubuntu助手附加说明.txt
+    fi
+}
 
 echo_out() {
     echo "$1" >> ~/Desktop/Ubuntu助手附加说明.txt || echo "$1" >> ~/桌面/Ubuntu助手附加说明.txt
@@ -186,7 +193,10 @@ function proxychains {
 	./configure
 	sudo make && sudo make install
 	sudo cp ./src/proxychains.conf /etc/proxychains.conf
-	echo -e "${BRed}请执行 sudo vi /etc/proxychains.conf ，将最后的 socks4 127.0.0.1 9095 改为 socks5 127.0.0.1 1089 ，其中 1089是qv2ray 6.0 版本 socks5 代理默认的开放端口，如果不确定自己的端口号，请查看后再输入。${Color_Off}"
+    touch_check
+    echo_out "【proxychains】"
+    echo_out "请执行 sudo vi /etc/proxychains.conf ，将最后的 socks4 127.0.0.1 9095 改为 socks5 127.0.0.1 1089 ，其中 1089是qv2ray 6.0 版本 socks5 代理默认的开放端口，如果不确定自己的端口号，请查看后再输入。"
+	#echo -e "${BRed}请执行 sudo vi /etc/proxychains.conf ，将最后的 socks4 127.0.0.1 9095 改为 socks5 127.0.0.1 1089 ，其中 1089是qv2ray 6.0 版本 socks5 代理默认的开放端口，如果不确定自己的端口号，请查看后再输入。${Color_Off}"
     rm -rf ~/linux-assistant/proxychains-ng
 }
 
@@ -342,6 +352,7 @@ function pycharm-cmu {
     tar -zxvf pycharm.tar.gz
     mv pycharm ~
     cd ~/pycharm/bin
+    touch_check
     echo_out "【Pycharm】"
     echo_out "pycharm的安装包已经放到 ~/pycharm 路径。将pycharm图标添加到启动器，请参考https://blog.csdn.net/bornfree5511/article/details/103985989"
     ./pycharm.sh
@@ -368,7 +379,7 @@ function qv2ray {
     mv ~/linux-assistant/qv2ray-packages/qv2ray-instruction.pdf ~/Desktop  || mv ~/linux-assistant/qv2ray-packages/qv2ray-instruction.pdf ~/桌面
     mv ~/linux-assistant/qv2ray-packages/qv2ray.AppImage ~
     chmod a+x ~/qv2ray.AppImage
-
+    touch_check
     echo_out "【Qv2ray】"
     echo_out "请新打开一个终端，运行 ./qv2ray.AppImage"
     echo_out "在你的桌面上有一个 qv2ray-instruction.pdf 文件，请阅读并按照配置。配置完成后，请关闭Qv2ray软件。"
@@ -417,8 +428,7 @@ function gitproxy {
 function gitpush_store_passwd {
     echo -e "${BRed}如果您的Gitee、GitHub、Gitlab不是同用户名、同密码，使用这项会造成上传错误！${Color_Off}"
     read -r -p "确认使用吗？[y/N]" response
-    if [[ "$response" =~ ^([yY][eE][sS][yY])$ ]]
-    then
+    if [[ "$response" =~ ^([yY][eE][sS][yY])$ ]];then
         git config --global credential.helper store && config_success
     else
         echo -e "${BRed}放弃配置此项${Color_Off}"
@@ -431,6 +441,7 @@ conda_pip_sources() {
     conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
     pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
     config_success
+    touch_check
     echo_out "【conda和pip源设置】"
     echo_out "若要修改配置文件，执行vi ~/.condarc，vi ~/.config/pip/pip.config"
 }
@@ -462,6 +473,7 @@ vmware() {
     chmod a+x vmware.bundle
     sudo ./vmware.bundle
     rm -rf ~/linux-assistant/vmware-package
+    touch_check
     echo_out "【VMware注册码】"
     echo_out "ZF3R0-FHED2-M80TY-8QYGC-NPKYF"
     echo_out "YF390-0HF8P-M81RQ-2DXQE-M2UT6"
@@ -517,6 +529,9 @@ nvidia-driver() {
     sudo ubuntu-drivers autoinstall   # for recommended
     # sudo  apt install nvidia-driver-xxx  # for self-assignment
     success
+    touch_check
+    echo_out "【NVIDIA显卡驱动】"
+    echo_out "请不要再更新内核，有可能导致显卡驱动失效。如果启动过程有任何问题，或者没有问题，也推荐按照此篇博客进行配置：https://blog.csdn.net/bornfree5511/article/details/109275982"
 }
 
 roboware() {
@@ -590,7 +605,7 @@ if [ $existstatus = 0 ]; then
 
     echo $SELECT | grep "proxychains" && proxychains
     selects "VMWare Pro 16" vmware
-    echo $SELECT | grep "搜狗拼音输入法" && through_git_deb sogou && echo -e "${BGreen}please restart to make sogou available.${Color_Off}"
+    echo $SELECT | grep "搜狗拼音输入法" && through_git_deb sogou && touch_check && echo_out "【搜狗拼音输入法】" && echo_out "请打开地区和语言设置->管理已安装语言->系统输入法框架，更改为fcitx，然后重启。重启后在输入法中添加搜狗，具体操作请参考：https://blog.csdn.net/lupengCSDN/article/details/80279177。只参考系统设置部分就可以，安装部分已经完成。"
     echo $SELECT | grep "百度网盘" && through_git_deb baidunetdisk
     
 
@@ -612,25 +627,35 @@ if [ $existstatus = 0 ]; then
 
     ##################################################
     # it's always at last. Otherwise there is a bug
-    echo $SELECT | grep "PyCharm Community" && pycharm-cmu
+    
     echo $SELECT | grep "Qv2ray" && qv2ray
+    echo $SELECT | grep "PyCharm Community" && pycharm-cmu
     echo $SELECT | grep "git设置socks5代理" && gitproxy
     #####################################################
+
+
+
+
+
+
+
+
+
     # it's the notes for some software below
     # echo $SELECT | grep "VMWare Pro 16" && echo -e "${BGreen}VMWare注册码：${Color_Off}"
     # echo $SELECT | grep "VMWare Pro 16" && echo "1.  ZF3R0-FHED2-M80TY-8QYGC-NPKYF"
     # echo $SELECT | grep "VMWare Pro 16" && echo "2.  YF390-0HF8P-M81RQ-2DXQE-M2UT6"
     # echo $SELECT | grep "VMWare Pro 16" && echo "3.  ZF71R-DMX85-08DQY-8YMNC-PPHV8"
 
-    echo ""
-    echo $SELECT | grep "搜狗拼音输入法" && echo -e "${BGreen}请打开地区和语言设置->管理已安装语言->系统输入法框架，更改为fcitx，然后重启。重启后在输入法中添加搜狗，具体操作请参考：https://blog.csdn.net/lupengCSDN/article/details/80279177。只参考系统设置部分就可以，安装部分已经完成。"
+  #  echo ""
+   # echo $SELECT | grep "搜狗拼音输入法" && echo -e "${BGreen}请打开地区和语言设置->管理已安装语言->系统输入法框架，更改为fcitx，然后重启。重启后在输入法中添加搜狗，具体操作请参考：https://blog.csdn.net/lupengCSDN/article/details/80279177。只参考系统设置部分就可以，安装部分已经完成。"
 
     # echo ""
     # echo $SELECT | grep "Qv2ray" && qv2ray_echo
-    echo ""
-    echo $SELECT | grep "NVIDIA显卡驱动" && echo -e "${BGreen}请不要再更新内核，有可能导致显卡驱动失效。如果启动过程有任何问题，或者没有问题，也推荐按照此篇博客进行配置：https://blog.csdn.net/bornfree5511/article/details/109275982${Color_Off}"
-    echo ""
-    echo $SELECT | grep "proxychains" && echo -e "${BRed}proxychains配置：请执行 sudo vi /etc/proxychains.conf ，将最后的 socks4 127.0.0.1 9095 改为 socks5 127.0.0.1 1089 ，其中 1089是qv2ray 6.0 版本 socks5 代理默认的开放端口，如果不确定自己的端口号，请查看后再输入。${Color_Off}"
+   # echo ""
+    #echo $SELECT | grep "NVIDIA显卡驱动" && echo -e "${BGreen}请不要再更新内核，有可能导致显卡驱动失效。如果启动过程有任何问题，或者没有问题，也推荐按照此篇博客进行配置：https://blog.csdn.net/bornfree5511/article/details/109275982${Color_Off}"
+   # echo ""
+   # echo $SELECT | grep "proxychains" && echo -e "${BRed}proxychains配置：请执行 sudo vi /etc/proxychains.conf ，将最后的 socks4 127.0.0.1 9095 改为 socks5 127.0.0.1 1089 ，其中 1089是qv2ray 6.0 版本 socks5 代理默认的开放端口，如果不确定自己的端口号，请查看后再输入。${Color_Off}"
     # echo ""
     # echo $SELECT | grep "RoboWare" && echo -e "${BGreen}软件说明文档已经放到桌面。${Color_Off}"
 
