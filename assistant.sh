@@ -39,6 +39,7 @@ SELECT=$(whiptail --title "Ubuntu助手" --checklist \
 "git push记住用户名和密码" "      使用https方式不用每次输入密码和用户名" OFF \
 "Ubuntu18再次点击图标最小化" "    再次点击图标时会最小化窗口" OFF \
 "Ubuntu18取消再次点击图标最小化" "恢复默认，再次点击图标没有反应" OFF \
+"Ubuntu18 换国内源"   "    可显著提高终端联网指令的网速" OFF \
 3>&1 1>&2 2>&3
 )
 
@@ -269,15 +270,16 @@ function mendeley {
 
 
 function teamviewer {
-    echo -e "${BYellow}将要安装TeamViewer${Color_Off}" && sleep 1s \
-	&& sudo apt install -y git \
-    && cd ~ \
-    && git clone https://gitee.com/borninfreedom/teamviewer-package.git ~/linux-assistant/teamviewer-package\
-    && cd ~/linux-assistant/teamviewer-package \
-    && sudo dpkg -i teamviewer.deb \
-    && sudo apt -f install \
-    &&  success \
-    && rm -rf teamviewer-package
+    echo -e "${BYellow}将要安装TeamViewer${Color_Off}" && sleep 1s 
+	sudo apt install -y git 
+    cd ~ 
+    git clone https://gitee.com/borninfreedom/teamviewer-package.git ~/linux-assistant/teamviewer-package
+    cd ~/linux-assistant/teamviewer-package 
+    sudo dpkg -i teamviewer.deb 
+    sudo apt -f install 
+    sudo apt -f install
+    success 
+    rm -rf teamviewer-package
 }
 
 function qq {
@@ -570,6 +572,23 @@ psensor() {
 
 }
 
+demestic_sources() {
+    sudo mv /etc/apt/sources.list /etc/apt/sources.list.bak
+    touch /etc/apt/sources.list
+    echo "deb https://mirrors.ustc.edu.cn/ubuntu/ bionic main restricted universe multiverse" >> /etc/apt/sources.list
+    echo "deb https://mirrors.ustc.edu.cn/ubuntu/ bionic main restricted universe multiverse" >> /etc/apt/sources.list
+    echo "deb-src https://mirrors.ustc.edu.cn/ubuntu/ bionic main restricted universe multiverse" >> /etc/apt/sources.list
+    echo "deb https://mirrors.ustc.edu.cn/ubuntu/ bionic-updates main restricted universe multiverse" >> /etc/apt/sources.list
+    echo "deb-src https://mirrors.ustc.edu.cn/ubuntu/ bionic-updates main restricted universe multiverse" >> /etc/apt/sources.list
+    echo "deb https://mirrors.ustc.edu.cn/ubuntu/ bionic-backports main restricted universe multiverse" >> /etc/apt/sources.list
+    echo "deb-src https://mirrors.ustc.edu.cn/ubuntu/ bionic-backports main restricted universe multiverse" >> /etc/apt/sources.list
+    echo "deb https://mirrors.ustc.edu.cn/ubuntu/ bionic-security main restricted universe multiverse" >> /etc/apt/sources.list
+    echo "deb-src https://mirrors.ustc.edu.cn/ubuntu/ bionic-security main restricted universe multiverse" >> /etc/apt/sources.list
+    echo "deb https://mirrors.ustc.edu.cn/ubuntu/ bionic-proposed main restricted universe multiverse" >> /etc/apt/sources.list
+    echo "deb-src https://mirrors.ustc.edu.cn/ubuntu/ bionic-proposed main restricted universe multiverse" >> /etc/apt/sources.list
+    sudo apt update
+
+}
 #################################################################################################################
 existstatus=$?
 
@@ -616,13 +635,7 @@ if [ $existstatus = 0 ]; then
     echo $SELECT | grep "VLC" && sudo add-apt-repository ppa:videolan/master-daily && sudo apt-get -y update && sudo apt-get install -y vlc
 
     selects "RoboWare" roboware
-
-
-
-
-
-
-
+    selects "Ubuntu18 换国内源" demestic_sources
 
 
     ##################################################
@@ -633,36 +646,9 @@ if [ $existstatus = 0 ]; then
     echo $SELECT | grep "git设置socks5代理" && gitproxy
     #####################################################
 
-
-
-
-
-
-
-
-
-    # it's the notes for some software below
-    # echo $SELECT | grep "VMWare Pro 16" && echo -e "${BGreen}VMWare注册码：${Color_Off}"
-    # echo $SELECT | grep "VMWare Pro 16" && echo "1.  ZF3R0-FHED2-M80TY-8QYGC-NPKYF"
-    # echo $SELECT | grep "VMWare Pro 16" && echo "2.  YF390-0HF8P-M81RQ-2DXQE-M2UT6"
-    # echo $SELECT | grep "VMWare Pro 16" && echo "3.  ZF71R-DMX85-08DQY-8YMNC-PPHV8"
-
-  #  echo ""
-   # echo $SELECT | grep "搜狗拼音输入法" && echo -e "${BGreen}请打开地区和语言设置->管理已安装语言->系统输入法框架，更改为fcitx，然后重启。重启后在输入法中添加搜狗，具体操作请参考：https://blog.csdn.net/lupengCSDN/article/details/80279177。只参考系统设置部分就可以，安装部分已经完成。"
-
-    # echo ""
-    # echo $SELECT | grep "Qv2ray" && qv2ray_echo
-   # echo ""
-    #echo $SELECT | grep "NVIDIA显卡驱动" && echo -e "${BGreen}请不要再更新内核，有可能导致显卡驱动失效。如果启动过程有任何问题，或者没有问题，也推荐按照此篇博客进行配置：https://blog.csdn.net/bornfree5511/article/details/109275982${Color_Off}"
-   # echo ""
-   # echo $SELECT | grep "proxychains" && echo -e "${BRed}proxychains配置：请执行 sudo vi /etc/proxychains.conf ，将最后的 socks4 127.0.0.1 9095 改为 socks5 127.0.0.1 1089 ，其中 1089是qv2ray 6.0 版本 socks5 代理默认的开放端口，如果不确定自己的端口号，请查看后再输入。${Color_Off}"
-    # echo ""
-    # echo $SELECT | grep "RoboWare" && echo -e "${BGreen}软件说明文档已经放到桌面。${Color_Off}"
-
     zenity --warning \
     --text="部分程序还需要一些附加操作才能安装成功，请阅读你的桌面上的【Ubuntu助手附加说明.txt】文件" 
-    
-    
+   
 ##################################################################################################################################
 
 else
