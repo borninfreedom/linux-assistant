@@ -574,7 +574,7 @@ psensor() {
 
 demestic_sources() {
     sudo mv /etc/apt/sources.list /etc/apt/sources.list.bak
-    touch /etc/apt/sources.list
+    sudo  touch /etc/apt/sources.list
     echo "deb https://mirrors.ustc.edu.cn/ubuntu/ bionic main restricted universe multiverse" >> /etc/apt/sources.list
     echo "deb https://mirrors.ustc.edu.cn/ubuntu/ bionic main restricted universe multiverse" >> /etc/apt/sources.list
     echo "deb-src https://mirrors.ustc.edu.cn/ubuntu/ bionic main restricted universe multiverse" >> /etc/apt/sources.list
