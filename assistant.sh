@@ -188,8 +188,8 @@ through_git_appimage() {
 Vim() {
 	sudo add-apt-repository ppa:jonathonf/vim	
 	sudo apt update
-	sudo apt install vim
-	sudo apt install vim-gtk3 vim-nox
+	sudo apt install -y vim
+	sudo apt install -y vim-gtk3 vim-nox
 }
 function proxychains {
 	echo -e "${BYellow}将要安装proxychains。${Color_Off}" && sleep 1s
