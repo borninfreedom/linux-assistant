@@ -27,6 +27,7 @@ SELECT=$(whiptail --title "Ubuntu助手" --checklist \
 "VMWare Pro 16" "虚拟机软件，功能强大" OFF \
 "VSCode" "代码编辑器，功能强大、易用" OFF \
 "VLC" "媒体播放器" OFF \
+"Vim 8.2" "支持YouCompleteme插件" OFF \
 "WPS" "Linux版WPS" OFF \
 "百度网盘" "    Linux版百度网盘" OFF \
 "搜狗拼音输入法" "       Linux版搜狗拼音输入法" OFF \
@@ -184,7 +185,12 @@ through_git_appimage() {
     rm -rf ~/linux-assistant/$1-package
 }
 
-
+Vim() {
+	sudo add-apt-repository ppa:jonathonf/vim	
+	sudo apt update
+	sudo apt install vim
+	sudo apt install vim-gtk3 vim-nox
+}
 function proxychains {
 	echo -e "${BYellow}将要安装proxychains。${Color_Off}" && sleep 1s
 	cd ~
@@ -635,7 +641,7 @@ if [ $existstatus = 0 ]; then
 
     selects "RoboWare" roboware
     selects "Ubuntu18 换国内源" demestic_sources
-
+	selects "Vim 8.2" Vim
 
     ##################################################
     # it's always at last. Otherwise there is a bug
