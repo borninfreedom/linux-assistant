@@ -42,7 +42,7 @@ call vundle#end()
 
 set splitbelow
 set splitright
-set laststatus=2
+set laststatus=2   "show powerline always
 "split navigations
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
@@ -53,10 +53,14 @@ nnoremap <C-H> <C-W><C-H>
 "ctrl l right
 "ctrl h left
 
+autocmd FileType python map <buffer>  <F9> :w<CR>:exec '!python3' shellescape(@%, 1)<CR>
+
+autocmd FileType python imap <buffer>  <F9>  <esc>:w<CR>:exec '!python3' shellescape(@%, 1)<CR>
+
 
 set clipboard=unnamed
 
-"NERDTree
+"NERDTree shortcut
 map <F2> :NERDTreeToggle<CR>
 
 
