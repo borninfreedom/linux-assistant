@@ -27,7 +27,7 @@ SELECT=$(whiptail --title "Ubuntu助手" --checklist \
 "VMWare Pro 16" "虚拟机软件，功能强大" OFF \
 "VSCode" "代码编辑器，功能强大、易用" OFF \
 "VLC" "媒体播放器" OFF \
-"Vim 8.2" "支持YouCompleteme插件" OFF \
+"Vim 8.2" "编译源码安装，添加python2支持,同时支持YouCompleteme插件" OFF \
 "WPS" "Linux版WPS" OFF \
 "百度网盘" "    Linux版百度网盘" OFF \
 "搜狗拼音输入法" "       Linux版搜狗拼音输入法" OFF \
@@ -186,11 +186,28 @@ through_git_appimage() {
 }
 
 Vim() {
-	sudo add-apt-repository ppa:jonathonf/vim	
-	sudo apt update
-	sudo apt install -y vim
+#	sudo add-apt-repository ppa:jonathonf/vim	
+#	sudo apt update
+#	sudo apt install -y vim
 	#sudo apt install -y vim-gtk3 vim-nox
+
+	sudo apt install libncurses5-dev libgtk2.0-dev libatk1.0-dev libcairo2-dev python-dev python3-dev git
+	sudo apt remove -y vim vim-runtime gvim
+	cd 
+	git clone https://github.com/vim/vim.git && sudo mv vim /usr
+	cd /usr/vim
+	sudo ./configure --with-features=huge  --enable-multibyte  --enable-pythoninterp=yes  --with-python-config-dir=/usr/lib/python2.7/config-x86_64-linux-gnu/  --enable-python3interp=yes  --with-python3-config-dir=/usr/lib/python3.6/config-3.6m-x86_64-linux-gnu/  --enable-gui=gtk2  --enable-cscope  --prefix=/usr/local/
+	sudo make VIMRUNTIMEDIR=/usr/local/share/vim/vim82
+	sudo make install
+	sudo update-alternatives --install /usr/bin/editor editor /usr/local/bin/vim 1
+	sudo update-alternatives --set editor /usr/local/bin/vim
+	sudo update-alternatives --install /usr/bin/vi vi /usr/local/bin/vim 1
+	sudo update-alternatives --set vi /usr/local/bin/vim
+	vim --version
+        echo -e "${BGreen}安装成功！${Color_Off}"
+
 }
+
 function proxychains {
 	echo -e "${BYellow}将要安装proxychains。${Color_Off}" && sleep 1s
 	cd ~
@@ -210,7 +227,15 @@ function proxychains {
 function redshift {		# the former of { must have a space
 	echo -e "${BGreen}Install redshift${Color_Off}" && sleep 1s \
 	# -y parameter indicates that you auto select yes.
-	sudo apt install -y redshift-gtk && echo -e "${BGreen}安装成功${Color_Off}"
+	sudo apt install -y redshift-gtk
+	echo ' ' | sudo tee -a /etc/geoclue/geoclue.conf
+	echo '[redshift]' | sudo tee -a /etc/geoclue/geoclue.conf
+	echo 'allowed=true' | sudo tee -a /etc/geoclue/geoclue.conf
+	echo 'system=false' | sudo tee -a /etc/geoclue/geoclue.conf
+	echo 'users=' | sudo tee -a /etc/geoclue/geoclue.conf
+        echo -e "${BGreen}安装成功！${Color_Off}"
+
+
 	# when you exec a command, shell will return a flag that indicates whether exec successfully. if success ,return 0, otherwise 1 default. you can use
 	# $? to extract the flag.
 	# the role of && is  if $?==0, then exec next cmd.
