@@ -21,7 +21,7 @@ Plugin 'suan/vim-instant-markdown'
 Plugin 'nelstrom/vim-markdown-preview'
 "python sytax checker
 Plugin 'nvie/vim-flake8'
-Plugin 'vim-scripts/Pydiction'
+"Plugin 'vim-scripts/Pydiction'
 Plugin 'vim-scripts/indentpython.vim'
 Plugin 'scrooloose/syntastic'
 
