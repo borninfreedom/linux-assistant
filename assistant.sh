@@ -194,7 +194,7 @@ Vim() {
 	sudo apt install libncurses5-dev libgtk2.0-dev libatk1.0-dev libcairo2-dev python-dev python3-dev git
 	sudo apt remove -y vim vim-runtime gvim
 	cd 
-	git clone https://github.com/vim/vim.git && sudo mv vim /usr
+	git clone https://gitee.com/borninfreedom/vim.git && sudo mv vim /usr
 	cd /usr/vim
 	sudo ./configure --with-features=huge  --enable-multibyte  --enable-pythoninterp=yes  --with-python-config-dir=/usr/lib/python2.7/config-x86_64-linux-gnu/  --enable-python3interp=yes  --with-python3-config-dir=/usr/lib/python3.6/config-3.6m-x86_64-linux-gnu/  --enable-gui=gtk2  --enable-cscope  --prefix=/usr/local/
 	sudo make VIMRUNTIMEDIR=/usr/local/share/vim/vim82
