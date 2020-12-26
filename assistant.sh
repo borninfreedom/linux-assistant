@@ -27,7 +27,7 @@ SELECT=$(whiptail --title "Ubuntu助手" --checklist \
 "VMWare Pro 16" "虚拟机软件，功能强大" OFF \
 "VSCode" "代码编辑器，功能强大、易用" OFF \
 "VLC" "媒体播放器" OFF \
-"Vim 8.2" "编译源码安装，添加python2支持,同时支持YouCompleteme插件" OFF \
+"Vim 8.2" "编译源码添加python2,支持YouCompleteme插件" OFF \
 "WPS" "Linux版WPS" OFF \
 "百度网盘" "    Linux版百度网盘" OFF \
 "搜狗拼音输入法" "       Linux版搜狗拼音输入法" OFF \
