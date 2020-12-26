@@ -1,14 +1,13 @@
 #!/bin/bash
 sudo apt install -y xterm
 sudo apt install -y zenity
-#touch ~/Desktop/Ubuntu助手附加说明.txt || touch ~/桌面/Ubuntu助手附加说明.txt
 resize -s 45 90
-#terminator --geometry=485x299 -b
 SELECT=$(whiptail --title "Ubuntu助手" --checklist \
 "选择要安装的软件或电脑配置（可多选，空格键选择，Tab键跳转)" 45 90 35 \
 "CUDA 9.1" "Ubuntu18 仓库提供" OFF \
 "CUDA 10.1, cudnn 7.6.5" "仅限于Ubuntu18" OFF \
 "CAJViewer" "知网文献阅读器" OFF \
+"FBReader" "Linux电子书阅读器，支持epub等格式" OFF \
 "Google Chrome" "市占率最高的浏览器" OFF \
 "Gnome Tweak Tool" "Ubuntu18设置软件" OFF \
 "Miniconda3" "Python虚拟环境管理器" OFF \
@@ -22,6 +21,7 @@ SELECT=$(whiptail --title "Ubuntu助手" --checklist \
 "RedShift-GTK" "护眼软件，可根据时间自动调节色温" OFF \
 "Simple Screen Recorder" "Linux优秀录屏软件" OFF \
 "Terminator" "可一窗口多开的终端模拟器" OFF \
+"tmux" "终端复用软件，尤其对于SSH连接服务器情况" OFF \
 "TeamViewer" "远程协助软件" OFF \
 "VirtualBox" "虚拟机软件" OFF \
 "VMWare Pro 16" "虚拟机软件，功能强大" OFF \
@@ -76,6 +76,17 @@ UBlue='\033[4;34m'        # Blue
 UPurple='\033[4;35m'      # Purple
 UCyan='\033[4;36m'        # Cyan
 UWhite='\033[4;37m'       # White
+
+
+Flag_Doc=0        # 0 stands for no need of a doc, 1 otherwise.
+
+# to determine os language
+if [ -d "${HOME}/Desktop" ]
+then
+    FileLocation="${HOME}/Desktop/Ubuntu助手附加说明.txt"
+else
+    FileLocation="${HOME}/桌面/Ubuntu助手附加说明.txt"
+fi
 
 
 touch_check() {
@@ -204,10 +215,35 @@ Vim() {
 	sudo update-alternatives --install /usr/bin/vi vi /usr/local/bin/vim 1
 	sudo update-alternatives --set vi /usr/local/bin/vim
 	vim --version
-        echo -e "${BGreen}安装成功！${Color_Off}"
+    echo -e "${BGreen}安装成功！${Color_Off}"
 
 }
 
+tmux() {
+    sudo apt install -y tmux || \
+    sudo apt install -y tmux || \
+    sudo apt install -y tmux && \
+    mv ~/.tmux.conf ~/.tmux.conf.bak 
+
+    cd
+    git clone https://github.com/gpakosz/.tmux.git
+    ln -s -f .tmux/.tmux.conf
+    cp .tmux/.tmux.conf.local .
+    
+    touch $fileLocation 
+    echo "【tmux】" >> $fileLocation
+    echo "tmux除了将软件安装之外，还自动进行了配置，配置文件说明请浏览网站https://github.com/gpakosz/.tmux" >> $fileLocation
+    echo "如果不想使用已经配置好的配合文件，而是想要一个纯净的tmux配置环境，请执行 mv ~/.tmux.conf.bak ~/.tmux.conf" >> $fileLocation
+    echo "如果想再次使用此较为完善的配置文件，请重新运行本软件，再次安装tmux即可。" >> $fileLocation
+
+    Flag_Doc=1
+    echo -e "${BGreen}安装成功！${Color_Off}"
+}
+
+fbreader() {
+    sudo apt install -y fbreader || sudo apt install -y fbreader || sudo apt install -y fbreader 
+    echo -e "${BGreen}安装成功！${Color_Off}"
+}
 function proxychains {
 	echo -e "${BYellow}将要安装proxychains。${Color_Off}" && sleep 1s
 	cd ~
@@ -545,16 +581,6 @@ cuda() {
     rm -rf ~/linux-assistant/cudnn7-package
 }
 
-# qv2ray_echo() {
-#     echo -e "${BRed}提示：请新打开一个终端，运行${Color_Off}"
-#     echo "sudo ./qv2ray.AppImage"
-#     echo -e "${BRed}在你的桌面上有一个Qv2ray的使用说明，请阅读并按照配置.${Color_Off}"
-#     echo -e "${BRed}关闭Qv2ray软件窗口，并运行${Color_Off}"
-#     echo "sudo mv ~/vcore ~/.config/qv2ray"
-#     echo -e "${BRed}然后运行下面指令，重新打开Qv2ray。${Color_Off}"
-#     echo "sudo ./qv2ray.AppImage"
-# }
-
 nvidia-driver() {
     echo -e "${BGreen}将要安装NVIDIA显卡驱动${Color_Off}"
     sudo add-apt-repository ppa:graphics-drivers/ppa
@@ -675,9 +701,16 @@ if [ $existstatus = 0 ]; then
     echo $SELECT | grep "PyCharm Community" && pycharm-cmu
     echo $SELECT | grep "git设置socks5代理" && gitproxy
     #####################################################
+    
+    if [ $Flag_Doc -eq 1 ]
+    then 
+        zenity --warning \
+         --text="部分程序有一些额外说明，请阅读你的桌面上的【Ubuntu助手附加说明.txt】文件" 
+    else
+        echo -e "${BGreen}全部安装完成！${Color_Off}"
+    fi
 
-    zenity --warning \
-    --text="部分程序还需要一些附加操作才能安装成功，请阅读你的桌面上的【Ubuntu助手附加说明.txt】文件" 
+
    
 ##################################################################################################################################
 
