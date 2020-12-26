@@ -1,9 +1,9 @@
 #!/bin/bash
 sudo apt install -y xterm
 sudo apt install -y zenity
-resize -s 45 90
+resize -s 45 95
 SELECT=$(whiptail --title "Ubuntu助手" --checklist \
-"选择要安装的软件或电脑配置（可多选，空格键选择，Tab键跳转)" 45 90 35 \
+"选择要安装的软件或电脑配置（可多选，空格键选择，Tab键跳转)" 45 95 40 \
 "CUDA 9.1" "Ubuntu18 仓库提供" OFF \
 "CUDA 10.1, cudnn 7.6.5" "仅限于Ubuntu18" OFF \
 "CAJViewer" "知网文献阅读器" OFF \
