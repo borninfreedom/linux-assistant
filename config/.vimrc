@@ -90,7 +90,7 @@ let g:ycm_autoclose_preview_window_after_completion=1
 let mapleader=" "
 map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 "
-call togglebg#map("<F5>")
+"call togglebg#map("<F5>")
 "colorscheme zenburn
 "set guifont=Monaco:h14
 

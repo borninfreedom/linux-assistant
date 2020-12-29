@@ -215,6 +215,15 @@ Vim() {
 	sudo update-alternatives --install /usr/bin/vi vi /usr/local/bin/vim 1
 	sudo update-alternatives --set vi /usr/local/bin/vim
 	vim --version
+
+    #add vim plug
+    sudo apt install curl
+    curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+    #add vim vundle
+    git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+
     echo -e "${BGreen}安装成功！${Color_Off}"
 
 }
