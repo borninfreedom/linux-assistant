@@ -693,6 +693,8 @@ if [ $existstatus = 0 ]; then
     selects "RoboWare" roboware
     selects "Ubuntu18 换国内源" demestic_sources
 	selects "Vim 8.2" Vim
+    selects "tmux" tmux
+    selects "FBReader" fbreader
 
     ##################################################
     # it's always at last. Otherwise there is a bug
